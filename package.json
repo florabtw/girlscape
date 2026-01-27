@@ -1,0 +1,21 @@
+{
+  "name": "girlscape",
+  "version": "1.0.0",
+  "description": "girlscape bot",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "imports": {
+    "#*": "./src/*"
+  },
+  "scripts": {
+    "commands:deploy": "./scripts/deploy-commands.sh",
+    "bot:run": "node src/index.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.25.1",
+    "dotenv": "^17.2.3",
+    "prettier": "^3.8.1"
+  }
+}
