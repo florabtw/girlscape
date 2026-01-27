@@ -11,7 +11,8 @@
   },
   "scripts": {
     "commands:deploy": "./scripts/deploy-commands.sh",
-    "bot:run": "node src/index.js"
+    "bot:run": "node src/index.js",
+    "postversion": "./scripts/postversion.sh"
   },
   "dependencies": {
     "discord.js": "^14.25.1",
