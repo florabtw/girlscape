@@ -4,13 +4,10 @@ const CLAN_ID = 3426;
 // ------------- STATS --------------
 
 async function getClanStats() {
-  // const res = await fetch(
-  //   `${TEMPLE_BASE_URL}/group_member_info.php?id=${CLAN_ID}&skills=1&bosses=1`,
-  // );
-  // const body = await res.json();
-  const { default: body } = await import("./json/clanstats.json", {
-    with: { type: "json" },
-  });
+  const res = await fetch(
+    `${TEMPLE_BASE_URL}/group_member_info.php?id=${CLAN_ID}&skills=1&bosses=1`,
+  );
+  const body = await res.json();
 
   return body.data.memberlist;
 }
@@ -79,13 +76,10 @@ async function getPlayerClogs(rsn) {
 }
 
 async function getClanCollectionLogs() {
-  // const res = await fetch(
-  //   `${TEMPLE_BASE_URL}/collection-log/group_collection_log.php?group=${CLAN_ID}&categories=${clogCategories}`,
-  // );
-  // const body = await res.json();
-  const { default: body } = await import("./json/clanlogs.json", {
-    with: { type: "json" },
-  });
+  const res = await fetch(
+    `${TEMPLE_BASE_URL}/collection-log/group_collection_log.php?group=${CLAN_ID}&categories=${clogCategories}`,
+  );
+  const body = await res.json();
 
   // map ids to { id, name }
   const data = body.data;
@@ -103,13 +97,10 @@ async function getClanCollectionLogs() {
 }
 
 async function getClanPets() {
-  // const res = await fetch(
-  //   `${TEMPLE_BASE_URL}/collection-log/group_collection_log.php?group=${CLAN_ID}&categories=all_pets`,
-  // );
-  // const body = await res.json();
-  const { default: body } = await import("./json/clanpets.json", {
-    with: { type: "json" },
-  });
+  const res = await fetch(
+    `${TEMPLE_BASE_URL}/collection-log/group_collection_log.php?group=${CLAN_ID}&categories=all_pets`,
+  );
+  const body = await res.json();
 
   // map ids to { id, name }
   const data = body.data;

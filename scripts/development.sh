@@ -10,6 +10,10 @@ down() {
   docker compose down
 }
 
+restart() {
+  docker compose restart $@
+}
+
 up() {
   docker compose up -d
 }
@@ -20,5 +24,6 @@ shift
 case "$COMMAND" in
 connect) connect $@ ;;
 down) down $@ ;;
+restart) restart $@ ;;
 up) up $@ ;;
 esac

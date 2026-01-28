@@ -10,7 +10,7 @@ const hasSkillCape = ({ skills }) =>
 
 const milestonesAvailable = [
   { name: "Champion's Cape", fn: hasItem("Champion's cape"), points: 2 },
-  { name: "Fire cape", fn: hasItem("Fire cape"), points: 2 },
+  { name: "Fire cape", fn: hasItem("Fire cape"), points: 1 },
   { name: "Infernal cape", fn: hasItem("Infernal cape"), points: 5 },
   { name: "Base 70s", fn: hasBaseStats(70), points: 1 },
   { name: "Base 80s", fn: hasBaseStats(80), points: 1 },

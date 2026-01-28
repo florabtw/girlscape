@@ -5,7 +5,7 @@ services:
     restart: unless-stopped
     volumes:
       - .env:/usr/src/app/.env
-      - ./src:/src
+      - ./src:/usr/src/app/src
   redis:
     container_name: redis
     image: redis:latest

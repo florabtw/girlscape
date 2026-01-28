@@ -12,7 +12,7 @@ export default {
   async execute(interaction) {
     await interaction.deferReply();
     const rsn = interaction.options.getString("rsn");
-    const rank = await clan.rank(rsn);
-    await interaction.editReply(rank);
+    const { message } = await clan.rank(rsn);
+    await interaction.editReply(message);
   },
 };

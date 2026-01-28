@@ -4,10 +4,22 @@ function formatList(list) {
     .join("\n");
 }
 
-function player({ rank, rsn }) {
-  const { collections, milestones, progress, raids, summary } = rank;
+function summary({ rsn, summary }) {
+  return (
+    `${rsn.padEnd(12)}` +
+    ` ——— RANK ${String(summary.rank).padEnd(2)}` +
+    ` ——— ${String(summary.points).padStart(2)} POINTS` +
+    ` ——— ${String(summary.progress).padStart(4)} EHP/EHB`
+  );
+}
 
-  return `**${rsn}** ——— RANK ${summary.rank} ——— ${summary.points} POINTS ——— ${summary.progress} EHP/EHB
+function player(rank) {
+  const { collections, milestones, progress, raids, rsn, summary } = rank;
+
+  return `**Clan Member**: ${rsn}
+- Rank ${summary.rank}
+- ${summary.points} points
+- ${summary.progress} EHP/EHB
 
 **Milestones:** ${milestones.points} points
 ${formatList(milestones.list)}
@@ -20,6 +32,12 @@ ${formatList(collections.list)}
 `;
 }
 
+function leaderboard(ranks) {
+  const summaries = ranks.map(({ rank }) => summary(rank)).join("\n");
+  return `\`\`\`${summaries}\`\`\``;
+}
+
 export default {
+  leaderboard,
   player,
 };

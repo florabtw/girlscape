@@ -23,7 +23,23 @@ async function rank(rsn) {
   if (!stats) throw Error("Player stats not found in clan.");
 
   const rank = Rank.player({ collectionLog, pets, stats });
-  const message = Format.player({ rsn, rank });
+  const message = Format.player(rank);
+
+  return { rank, message };
+}
+
+function byRank(a, b) {
+  return b.rank.summary.rank - a.rank.summary.rank;
+}
+
+async function leaderboard() {
+  const clanStats = await db.json.get("clan:stats");
+  const players = Object.keys(clanStats);
+
+  const ranks = await Promise.all(players.map(rank));
+  ranks.sort(byRank);
+
+  const message = Format.leaderboard(ranks);
 
   return message;
 }
@@ -50,6 +66,7 @@ async function update() {
 }
 
 export default {
+  leaderboard,
   rank,
   update,
 };

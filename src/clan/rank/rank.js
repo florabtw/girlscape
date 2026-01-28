@@ -32,6 +32,7 @@ function player({ collectionLog, stats, pets }) {
   const collections = Collections.player({ collectionLog, pets, stats });
 
   const summary = getSummary({ collections, milestones, progress, raids });
+  const rsn = stats.player_name_with_capitalization || stats.player;
 
   return {
     collections,
@@ -39,6 +40,7 @@ function player({ collectionLog, stats, pets }) {
     progress,
     raids,
     summary,
+    rsn,
   };
 }
 
