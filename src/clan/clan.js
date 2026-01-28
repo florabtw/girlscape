@@ -11,11 +11,9 @@ async function rank(rsn) {
   const clanPets = await db.json.get("clan:pets");
   const clanVerifieds = (await db.json.get("clan:verifieds")) || {};
 
-  const playerKey = Object.keys(clanStats).find(
-    (key) => key.toLowerCase() === rsn,
-  );
+  const [_statsRsn, stats] =
+    Object.entries(clanStats).find(([key]) => key.toLowerCase() === rsn) || [];
 
-  const stats = clanStats[playerKey];
   const collectionLog = clanCollectionLog.members.find(
     (member) => member.player.toLowerCase() === rsn,
   );
@@ -47,7 +45,7 @@ async function leaderboard() {
   const db = await getRedisClient();
 
   const clanStats = await db.json.get("clan:stats");
-  const players = Object.keys(clanStats);
+  const players = Object.keys(clanStats).map((rsn) => rsn.toLowerCase());
 
   const ranks = await Promise.all(players.map(rank));
   ranks.sort(byRank);
@@ -80,26 +78,41 @@ async function update() {
   console.log("Updated!");
 }
 
-async function verify(rsn, milestone) {
+async function verify(rsn, milestones) {
   const db = await getRedisClient();
+
+  const clanStats = await db.json.get("clan:stats");
+  const isClanPlayer = Object.keys(clanStats).find(
+    (key) => key.toLowerCase() === rsn,
+  );
+  if (!isClanPlayer) throw new Error(`Player ${rsn} not found in clan.`);
 
   const verifieds = (await db.json.get("clan:verifieds")) || {};
 
   const playerVerified = verifieds[rsn] || {};
-  playerVerified[milestone] = true;
+
+  for (const milestone of milestones) {
+    playerVerified[milestone] = true;
+  }
 
   verifieds[rsn] = playerVerified;
 
   await db.json.set("clan:verifieds", "$", verifieds);
 
   console.log(
-    `Verified ${rsn} ${milestone}. Player verifieds: `,
+    `Verified ${rsn} ${milestones.join(", ")}. Player verifieds: `,
     JSON.stringify(playerVerified, null, 2),
   );
 }
 
 async function unverify(rsn, milestone) {
   const db = await getRedisClient();
+
+  const clanStats = await db.json.get("clan:stats");
+  const isClanPlayer = Object.keys(clanStats).find(
+    (key) => key.toLowerCase() === rsn,
+  );
+  if (!isClanPlayer) throw new Error(`Player ${rsn} not found in clan.`);
 
   const verifieds = (await db.json.get("clan:verifieds")) || {};
 

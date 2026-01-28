@@ -23,10 +23,14 @@ export default {
     const rsn = interaction.options.getString("rsn").toLowerCase();
     const milestone = interaction.options.getString("milestone");
 
-    await clan.unverify(rsn, milestone);
+    try {
+      await clan.unverify(rsn, milestone);
 
-    await interaction.editReply(
-      `:white_check_mark: Removed ${milestone} from player ${rsn}`,
-    );
+      await interaction.editReply(
+        `:white_check_mark: Removed ${milestone} from player ${rsn}`,
+      );
+    } catch (err) {
+      await interaction.editReply(err.toString());
+    }
   },
 };

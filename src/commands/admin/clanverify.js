@@ -12,21 +12,56 @@ export default {
     )
     .addStringOption((option) =>
       option
-        .setName("milestone")
+        .setName("milestone1")
         .setDescription("milestone shortname")
         .setRequired(true)
+        .addChoices(verifiedOptions),
+    )
+    .addStringOption((option) =>
+      option
+        .setName("milestone2")
+        .setDescription("milestone shortname")
+        .addChoices(verifiedOptions),
+    )
+    .addStringOption((option) =>
+      option
+        .setName("milestone3")
+        .setDescription("milestone shortname")
+        .addChoices(verifiedOptions),
+    )
+    .addStringOption((option) =>
+      option
+        .setName("milestone4")
+        .setDescription("milestone shortname")
+        .addChoices(verifiedOptions),
+    )
+    .addStringOption((option) =>
+      option
+        .setName("milestone5")
+        .setDescription("milestone shortname")
         .addChoices(verifiedOptions),
     ),
   async execute(interaction) {
     await interaction.deferReply();
 
     const rsn = interaction.options.getString("rsn").toLowerCase();
-    const milestone = interaction.options.getString("milestone");
 
-    await clan.verify(rsn, milestone);
+    const milestones = [
+      interaction.options.getString("milestone1"),
+      interaction.options.getString("milestone2"),
+      interaction.options.getString("milestone3"),
+      interaction.options.getString("milestone4"),
+      interaction.options.getString("milestone5"),
+    ].filter((string) => !!string);
 
-    await interaction.editReply(
-      `:white_check_mark: Verified ${rsn} has completed ${milestone}`,
-    );
+    try {
+      await clan.verify(rsn, milestones);
+
+      await interaction.editReply(
+        `:white_check_mark: Verified ${rsn} has completed ${milestones.join(", ")}`,
+      );
+    } catch (err) {
+      await interaction.editReply(err.toString());
+    }
   },
 };
