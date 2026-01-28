@@ -1,4 +1,4 @@
-function player({ collectionLog, pets, stats }) {
+function player({ pets, stats }) {
   const clogPoints = Math.floor(stats.bosses.Collections / 100);
 
   const petPoints = pets ? Math.floor(pets.items.length / 5) : 0;

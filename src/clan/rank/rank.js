@@ -29,7 +29,7 @@ function player({ collectionLog, stats, pets, verifieds }) {
   const progress = Progress.player({ stats });
   const milestones = Milestones.player({ collectionLog, stats, verifieds });
   const raids = Raids.player({ collectionLog, stats });
-  const collections = Collections.player({ collectionLog, pets, stats });
+  const collections = Collections.player({ pets, stats });
 
   const summary = getSummary({ collections, milestones, progress, raids });
   const rsn = stats.player_name_with_capitalization || stats.player;

@@ -9,7 +9,7 @@ async function rank(rsn) {
   const clanStats = await db.json.get("clan:stats");
   const clanCollectionLog = await db.json.get("clan:collectionLog");
   const clanPets = await db.json.get("clan:pets");
-  const clanVerifieds = await db.json.get("clan:verifieds");
+  const clanVerifieds = (await db.json.get("clan:verifieds")) || {};
 
   const playerKey = Object.keys(clanStats).find(
     (key) => key.toLowerCase() === rsn,
@@ -22,7 +22,7 @@ async function rank(rsn) {
   const pets = clanPets.members.find(
     (member) => member.player.toLowerCase() === rsn,
   );
-  const verifieds = clanVerifieds[rsn] || {};
+  const verifieds = clanVerifieds[rsn];
 
   if (!stats) throw Error("Player stats not found in clan.");
 
