@@ -22,7 +22,7 @@ async function rank(rsn) {
   const pets = clanPets.members.find(
     (member) => member.player.toLowerCase() === rsn,
   );
-  const verifieds = clanVerifieds[rsn];
+  const verifieds = clanVerifieds[rsn] || {};
 
   if (!stats) throw Error("Player stats not found in clan.");
 
