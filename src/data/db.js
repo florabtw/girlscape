@@ -1,7 +1,9 @@
-import { createClient } from 'redis';
+import { createClient } from "redis";
 
-const db = await createClient()
-  .on('error', (err) => console.log('Redis Client Error', err))
+import config from "#config.js";
+
+const db = await createClient({ url: config.redis.url })
+  .on("error", (err) => console.log("Redis Client Error", err))
   .connect();
 
 export default db;

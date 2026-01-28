@@ -1,4 +1,11 @@
 services:
+  girlscape:
+    container_name: girlscape
+    image: floramoon/girlscape:latest
+    restart: unless-stopped
+    volumes:
+      - .env:/usr/src/app/.env
+      - ./src:/src
   redis:
     container_name: redis
     image: redis:latest
