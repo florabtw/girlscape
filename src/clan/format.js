@@ -1,6 +1,9 @@
 function formatList(list) {
   return list
-    .map((item) => `- ${item.name} - ${item.points} points`)
+    .map((item) => {
+      const emoji = item.points ? ":green_circle:" : ":black_circle:";
+      return `${emoji} ${item.name}` + `— ${item.points} points`;
+    })
     .join("\n");
 }
 

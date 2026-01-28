@@ -1,4 +1,4 @@
-import { hasItem } from "./utils.js";
+import { hasItem, hasVerified } from "./utils.js";
 
 const hasBaseStats =
   (target) =>
@@ -22,23 +22,43 @@ const milestonesAvailable = [
     fn: hasItem("Dizana's quiver (uncharged)"),
     points: 3,
   },
-  // Quest cape
-  // Music cape
-  // All medium diaries
-  // All hard diaries
-  // Achievement Diary cape
-  // Blood Torva
-  // Hard  CA
-  // Elite CA
-  // Master CA
-  // Grandmaster CA
-  // Radiant Oathplate
+  { name: "Quest Cape", fn: hasVerified("quest_cape"), points: 1 },
+  { name: "Music Cape", fn: hasVerified("music_cape"), points: 2 },
+  {
+    name: "Achievement Diary Cape",
+    fn: hasVerified("achievement_cape"),
+    points: 3,
+  },
+  { name: "Medium Diaries", fn: hasVerified("diaries_medium"), points: 1 },
+  { name: "Hard Diaries", fn: hasVerified("diaries_hard"), points: 2 },
+  { name: "Hard Combat Achievements", fn: hasVerified("cas_hard"), points: 1 },
+  {
+    name: "Elite Combat Achievements",
+    fn: hasVerified("cas_elite"),
+    points: 2,
+  },
+  {
+    name: "Master Combat Achievements",
+    fn: hasVerified("cas_master"),
+    points: 3,
+  },
+  {
+    name: "Grandmaster Combat Achievements",
+    fn: hasVerified("cas_grandmaster"),
+    points: 6,
+  },
+  { name: "Blood Torva", fn: hasVerified("blood_torva"), points: 3 },
+  {
+    name: "Radiant Oathplate",
+    fn: hasVerified("radiant_oathplate"),
+    points: 3,
+  },
 ];
 
-function getMilestones({ collectionLog, skills, stats }) {
+function getMilestones({ collectionLog, skills, stats, verifieds }) {
   let milestones = [];
   for (let { name, fn, points } of milestonesAvailable) {
-    const hasRequirement = fn({ collectionLog, skills, stats });
+    const hasRequirement = fn({ collectionLog, skills, stats, verifieds });
     if (!hasRequirement) points = 0;
     milestones.push({ name, points });
   }
@@ -51,9 +71,9 @@ function getSkills(stats) {
   );
 }
 
-function player({ collectionLog, stats }) {
+function player({ collectionLog, stats, verifieds }) {
   const skills = getSkills(stats);
-  const list = getMilestones({ collectionLog, skills });
+  const list = getMilestones({ collectionLog, skills, verifieds });
   const points = list.reduce((sum, { points }) => sum + points, 0);
 
   return {

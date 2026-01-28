@@ -25,9 +25,9 @@ function getSummary({ collections, milestones, progress, raids }) {
   };
 }
 
-function player({ collectionLog, stats, pets }) {
+function player({ collectionLog, stats, pets, verifieds }) {
   const progress = Progress.player({ stats });
-  const milestones = Milestones.player({ collectionLog, stats });
+  const milestones = Milestones.player({ collectionLog, stats, verifieds });
   const raids = Raids.player({ collectionLog, stats });
   const collections = Collections.player({ collectionLog, pets, stats });
 

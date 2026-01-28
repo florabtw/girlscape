@@ -9,22 +9,24 @@ async function rank(rsn) {
   const clanStats = await db.json.get("clan:stats");
   const clanCollectionLog = await db.json.get("clan:collectionLog");
   const clanPets = await db.json.get("clan:pets");
+  const clanVerifieds = await db.json.get("clan:verifieds");
 
   const playerKey = Object.keys(clanStats).find(
-    (key) => key.toLowerCase() === rsn.toLowerCase(),
+    (key) => key.toLowerCase() === rsn,
   );
 
   const stats = clanStats[playerKey];
   const collectionLog = clanCollectionLog.members.find(
-    (member) => member.player.toLowerCase() === rsn.toLowerCase(),
+    (member) => member.player.toLowerCase() === rsn,
   );
   const pets = clanPets.members.find(
-    (member) => member.player.toLowerCase() === rsn.toLowerCase(),
+    (member) => member.player.toLowerCase() === rsn,
   );
+  const verifieds = clanVerifieds[rsn];
 
   if (!stats) throw Error("Player stats not found in clan.");
 
-  const rank = Rank.player({ collectionLog, pets, stats });
+  const rank = Rank.player({ collectionLog, pets, stats, verifieds });
   const message = Format.player(rank);
 
   return { rank, message };
@@ -78,8 +80,46 @@ async function update() {
   console.log("Updated!");
 }
 
+async function verify(rsn, milestone) {
+  const db = await getRedisClient();
+
+  const verifieds = (await db.json.get("clan:verifieds")) || {};
+
+  const playerVerified = verifieds[rsn] || {};
+  playerVerified[milestone] = true;
+
+  verifieds[rsn] = playerVerified;
+
+  await db.json.set("clan:verifieds", "$", verifieds);
+
+  console.log(
+    `Verified ${rsn} ${milestone}. Player verifieds: `,
+    JSON.stringify(playerVerified, null, 2),
+  );
+}
+
+async function unverify(rsn, milestone) {
+  const db = await getRedisClient();
+
+  const verifieds = (await db.json.get("clan:verifieds")) || {};
+
+  const playerVerified = verifieds[rsn] || {};
+  playerVerified[milestone] = false;
+
+  verifieds[rsn] = playerVerified;
+
+  await db.json.set("clan:verifieds", "$", verifieds);
+
+  console.log(
+    `Unverified ${rsn} ${milestone}. Player verifieds: `,
+    JSON.stringify(playerVerified, null, 2),
+  );
+}
+
 export default {
   leaderboard,
   rank,
+  unverify,
   update,
+  verify,
 };
