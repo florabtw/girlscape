@@ -31,7 +31,14 @@ async function rank(rsn) {
 }
 
 function byRank(a, b) {
-  return b.rank.summary.rank - a.rank.summary.rank;
+  let sort = b.rank.summary.rank - a.rank.summary.rank;
+  if (sort === 0) {
+    sort = b.rank.summary.points - a.rank.summary.points;
+  }
+  if (sort === 0) {
+    sort = b.rank.summary.progress - a.rank.summary.progress;
+  }
+  return sort;
 }
 
 async function leaderboard() {
