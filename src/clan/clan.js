@@ -1,9 +1,11 @@
 import Format from "#clan/format.js";
 import Rank from "#clan/rank/rank.js";
-import db from "#data/db.js";
 import temple from "#clan/temple.js";
+import { getRedisClient } from "#data/db.js";
 
 async function rank(rsn) {
+  const db = await getRedisClient();
+
   const clanStats = await db.json.get("clan:stats");
   const clanCollectionLog = await db.json.get("clan:collectionLog");
   const clanPets = await db.json.get("clan:pets");
@@ -33,6 +35,8 @@ function byRank(a, b) {
 }
 
 async function leaderboard() {
+  const db = await getRedisClient();
+
   const clanStats = await db.json.get("clan:stats");
   const players = Object.keys(clanStats);
 
@@ -49,6 +53,8 @@ function wait(ms) {
 }
 
 async function update() {
+  const db = await getRedisClient();
+
   const stats = await temple.stats.clan();
   await db.json.set("clan:stats", "$", stats);
 

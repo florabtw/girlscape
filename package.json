@@ -10,7 +10,8 @@
     "#*": "./src/*"
   },
   "scripts": {
-    "commands:deploy": "./scripts/deploy-commands.sh",
+    "commands:deploy:dev": "NODE_ENV=development ./scripts/deploy-commands.sh",
+    "commands:deploy:prod": "NODE_ENV=production ./scripts/deploy-commands.sh",
     "bot:run": "node src/index.js",
     "postversion": "./scripts/postversion.sh"
   },

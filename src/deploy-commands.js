@@ -5,6 +5,14 @@ import { fileURLToPath } from "node:url";
 
 import config from "./config.js";
 
+import dotenv from "dotenv";
+
+if (process.env.NODE_ENV === "production") {
+  dotenv.config({ path: ".env.prod" });
+} else {
+  dotenv.config({ path: ".env" });
+}
+
 // Construct and prepare an instance of the REST module
 const rest = new REST().setToken(config.discord.token);
 
