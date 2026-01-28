@@ -2,7 +2,7 @@ FROM node:24.12
 
 WORKDIR /usr/src/app
 
-COPY .env          .env
+COPY .env.prod     .env
 COPY src           src
 COPY package.json  .
 

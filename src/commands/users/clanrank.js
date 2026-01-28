@@ -1,11 +1,10 @@
 import { SlashCommandBuilder } from "discord.js";
 
-import player from "#rank/player.js";
-import formatter from "#rank/format.js";
+import clan from "#clan/clan.js";
 
 export default {
   data: new SlashCommandBuilder()
-    .setName("rank")
+    .setName("clanrank")
     .setDescription("Provides clank rank statistics.")
     .addStringOption((option) =>
       option.setName("rsn").setDescription("osrs username").setRequired(true),
@@ -13,8 +12,7 @@ export default {
   async execute(interaction) {
     await interaction.deferReply();
     const rsn = interaction.options.getString("rsn");
-    const rank = await player.rank(rsn);
-    const reply = formatter.rank(rank);
-    await interaction.editReply(reply);
+    const rank = await clan.rank(rsn);
+    await interaction.editReply(rank);
   },
 };
