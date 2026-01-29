@@ -1,28 +1,22 @@
 import Format from "#clan/format.js";
 import Rank from "#clan/rank/rank.js";
 import temple from "#clan/temple.js";
-import { getRedisClient } from "#data/db.js";
+import {
+  getCollectionLog,
+  getPets,
+  getRedisClient,
+  getStats,
+  getVerifieds,
+} from "#data/db.js";
 
 async function rank(rsn) {
-  const db = await getRedisClient();
-
-  const clanStats = await db.json.get("clan:stats");
-  const clanCollectionLog = await db.json.get("clan:collectionLog");
-  const clanPets = await db.json.get("clan:pets");
-  const clanVerifieds = (await db.json.get("clan:verifieds")) || {};
-
-  const [_statsRsn, stats] =
-    Object.entries(clanStats).find(([key]) => key.toLowerCase() === rsn) || [];
-
-  const collectionLog = clanCollectionLog.members.find(
-    (member) => member.player.toLowerCase() === rsn,
-  );
-  const pets = clanPets.members.find(
-    (member) => member.player.toLowerCase() === rsn,
-  );
-  const verifieds = clanVerifieds[rsn];
+  const stats = await getStats(rsn);
 
   if (!stats) throw Error("Player stats not found in clan.");
+
+  const collectionLog = await getCollectionLog(rsn);
+  const pets = await getPets(rsn);
+  const verifieds = await getVerifieds(rsn);
 
   const rank = Rank.player({ collectionLog, pets, stats, verifieds });
   const message = Format.player(rank);
