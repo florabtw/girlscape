@@ -1,3 +1,7 @@
+export function normalizeRsn(rsn) {
+  return rsn.toLowerCase().replaceAll("-", " ");
+}
+
 export const hasItem =
   (item) =>
   ({ collectionLog }) => {

@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from "discord.js";
 
 import clan from "#clan/clan.js";
-import { verifiedOptions } from "#clan/rank/utils.js";
+import { normalizeRsn, verifiedOptions } from "#clan/rank/utils.js";
 
 export default {
   data: new SlashCommandBuilder()
@@ -44,7 +44,7 @@ export default {
   async execute(interaction) {
     await interaction.deferReply();
 
-    const rsn = interaction.options.getString("rsn").toLowerCase();
+    const rsn = normalizeRsn(interaction.options.getString("rsn"));
 
     const milestones = [
       interaction.options.getString("milestone1"),

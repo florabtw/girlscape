@@ -1,6 +1,7 @@
 import Format from "#clan/format.js";
 import Rank from "#clan/rank/rank.js";
 import temple from "#clan/temple.js";
+import { normalizeRsn } from "#clan/rank/utils.js";
 import {
   getCollectionLog,
   getPets,
@@ -39,7 +40,7 @@ async function leaderboard() {
   const db = await getRedisClient();
 
   const clanStats = await db.json.get("clan:stats");
-  const players = Object.keys(clanStats).map((rsn) => rsn.toLowerCase());
+  const players = Object.keys(clanStats).map(normalizeRsn);
 
   const ranks = await Promise.all(players.map(rank));
   ranks.sort(byRank);
@@ -75,11 +76,8 @@ async function update() {
 async function verify(rsn, milestones) {
   const db = await getRedisClient();
 
-  const clanStats = await db.json.get("clan:stats");
-  const isClanPlayer = Object.keys(clanStats).find(
-    (key) => key.toLowerCase() === rsn,
-  );
-  if (!isClanPlayer) throw new Error(`Player ${rsn} not found in clan.`);
+  const stats = await getStats(rsn);
+  if (!stats) throw new Error(`Player ${rsn} not found in clan.`);
 
   const verifieds = (await db.json.get("clan:verifieds")) || {};
 
@@ -102,11 +100,8 @@ async function verify(rsn, milestones) {
 async function unverify(rsn, milestone) {
   const db = await getRedisClient();
 
-  const clanStats = await db.json.get("clan:stats");
-  const isClanPlayer = Object.keys(clanStats).find(
-    (key) => key.toLowerCase() === rsn,
-  );
-  if (!isClanPlayer) throw new Error(`Player ${rsn} not found in clan.`);
+  const stats = await getStats(rsn);
+  if (!stats) throw new Error(`Player ${rsn} not found in clan.`);
 
   const verifieds = (await db.json.get("clan:verifieds")) || {};
 
