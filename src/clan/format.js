@@ -2,9 +2,15 @@ function formatList(list) {
   return list
     .map((item) => {
       const emoji = item.points ? ":green_circle:" : ":black_circle:";
-      return `${emoji} ${item.name}` + `— ${item.points} points`;
+      return `${emoji} ${item.name}` + ` — ${item.points} points`;
     })
     .join("\n");
+}
+
+function formatDeductions({ summary: { deductions } }) {
+  if (!deductions.value) return "";
+
+  return `:small_red_triangle_down: Deductions — ${deductions.value}\n`;
 }
 
 function summary({ rsn, summary }) {
@@ -20,10 +26,10 @@ function player(rank) {
   const { collections, milestones, progress, raids, rsn, summary } = rank;
 
   return `**Clan Member**: ${rsn}
-- Rank ${summary.rank}
-- ${summary.points} points
-- ${summary.progress} EHP/EHB
-
+:trophy: Rank — ${summary.rank}
+:star: Points — ${summary.points}
+:chart_with_upwards_trend: EHP/EHB — ${summary.progress}
+${formatDeductions({ summary })}
 **Milestones:** ${milestones.points} points
 ${formatList(milestones.list)}
 

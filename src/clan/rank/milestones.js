@@ -11,13 +11,19 @@ const hasSkillCape = ({ skills }) =>
 const milestonesAvailable = [
   { name: "Champion's Cape", fn: hasItem("Champion's cape"), points: 2 },
   { name: "Fire cape", fn: hasItem("Fire cape"), points: 1 },
-  { name: "Infernal cape", fn: hasItem("Infernal cape"), points: 5 },
+  {
+    isDeductible: true,
+    name: "Infernal cape",
+    fn: hasItem("Infernal cape"),
+    points: 5,
+  },
   { name: "Base 70s", fn: hasBaseStats(70), points: 1 },
   { name: "Base 80s", fn: hasBaseStats(80), points: 1 },
   { name: "Base 90s", fn: hasBaseStats(90), points: 1 },
   { name: "First 99", fn: hasSkillCape, points: 2 },
   { name: "Maxed", fn: hasBaseStats(99), points: 2 },
   {
+    isDeductible: true,
     name: "Dizana's Quiver",
     fn: hasItem("Dizana's quiver (uncharged)"),
     points: 3,
@@ -43,12 +49,19 @@ const milestonesAvailable = [
     points: 3,
   },
   {
+    isDeductible: true,
     name: "Grandmaster Combat Achievements",
     fn: hasVerified("cas_grandmaster"),
     points: 6,
   },
-  { name: "Blood Torva", fn: hasVerified("blood_torva"), points: 3 },
   {
+    isDeductible: true,
+    name: "Blood Torva",
+    fn: hasVerified("blood_torva"),
+    points: 3,
+  },
+  {
+    isDeductible: true,
     name: "Radiant Oathplate",
     fn: hasVerified("radiant_oathplate"),
     points: 3,
@@ -57,10 +70,10 @@ const milestonesAvailable = [
 
 function getMilestones({ collectionLog, skills, stats, verifieds }) {
   let milestones = [];
-  for (let { name, fn, points } of milestonesAvailable) {
+  for (let { isDeductible, name, fn, points } of milestonesAvailable) {
     const hasRequirement = fn({ collectionLog, skills, stats, verifieds });
     if (!hasRequirement) points = 0;
-    milestones.push({ name, points });
+    milestones.push({ isDeductible, name, points });
   }
   return milestones;
 }
