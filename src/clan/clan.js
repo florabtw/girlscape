@@ -1,5 +1,6 @@
 import Format from "#clan/format.js";
 import Rank from "#clan/rank/rank.js";
+import TopFive from "#clan/rank/topfive.js";
 import temple from "#clan/temple.js";
 import { normalizeRsn } from "#clan/rank/utils.js";
 import {
@@ -12,42 +13,49 @@ import {
 
 async function rank(rsn) {
   const stats = await getStats(rsn);
-
   if (!stats) throw Error("Player stats not found in clan.");
 
-  const collectionLog = await getCollectionLog(rsn);
-  const pets = await getPets(rsn);
-  const verifieds = await getVerifieds(rsn);
+  const { players } = await leaderboard();
 
-  const rank = Rank.player({ collectionLog, pets, stats, verifieds });
-  const message = Format.player(rank);
+  const player = players.find((p) => normalizeRsn(p.rsn) === rsn);
+  const message = Format.player(player);
 
-  return { rank, message };
+  return { player, message };
 }
 
 function byRank(a, b) {
-  let sort = b.rank.summary.rank - a.rank.summary.rank;
+  let sort = b.summary.rank.current - a.summary.rank.current;
   if (sort === 0) {
-    sort = b.rank.summary.points - a.rank.summary.points;
+    sort = b.summary.points - a.summary.points;
   }
   if (sort === 0) {
-    sort = b.rank.summary.progress - a.rank.summary.progress;
+    sort = b.summary.progress - a.summary.progress;
   }
   return sort;
 }
 
 async function leaderboard() {
   const db = await getRedisClient();
-
   const clanStats = await db.json.get("clan:stats");
-  const players = Object.keys(clanStats).map(normalizeRsn);
+  const playerNames = Object.keys(clanStats).map(normalizeRsn);
 
-  const ranks = await Promise.all(players.map(rank));
-  ranks.sort(byRank);
+  let players = [];
+  for (const rsn of playerNames) {
+    const stats = await getStats(rsn);
+    const collectionLog = await getCollectionLog(rsn);
+    const pets = await getPets(rsn);
+    const verifieds = await getVerifieds(rsn);
 
-  const message = Format.leaderboard(ranks);
+    const player = Rank.player({ collectionLog, pets, stats, verifieds });
+    players.push(player);
+  }
 
-  return message;
+  players.sort(byRank);
+  players = TopFive.apply(players);
+
+  const message = Format.leaderboard(players);
+
+  return { players, message };
 }
 
 function wait(ms) {

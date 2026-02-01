@@ -1,3 +1,5 @@
+// ------------- RANK ------------
+
 function formatList(list) {
   return list
     .map((item) => {
@@ -7,29 +9,30 @@ function formatList(list) {
     .join("\n");
 }
 
-function formatDeductions({ summary: { deductions } }) {
-  if (!deductions.ranks) return "";
+// Deductions + Displacements
+function formatDeranks({ summary: { deductions, displacements } }) {
+  let msg = "";
 
-  return `:small_red_triangle_down: Deductions — ${deductions.ranks}\n`;
+  if (displacements?.length) {
+    const formatted = displacements.map((d) => d.name).join(", ");
+    msg += `:no_entry: Displaced by — ${formatted}\n`;
+  }
+
+  if (deductions.ranks) {
+    msg += `:small_red_triangle_down: Missing milestones — ${deductions.ranks}\n`;
+  }
+
+  return msg;
 }
 
-function summary({ rsn, summary }) {
-  return (
-    `${rsn.padEnd(12)}` +
-    ` ——— RANK ${String(summary.rank).padEnd(2)}` +
-    ` ——— ${String(summary.points).padStart(2)} POINTS` +
-    ` ——— ${String(summary.progress).padStart(4)} EHP/EHB`
-  );
-}
-
-function player(rank) {
-  const { collections, milestones, progress, raids, rsn, summary } = rank;
+function player(player) {
+  const { collections, milestones, progress, raids, rsn, summary } = player;
 
   return `**Clan Member**: ${rsn}
-:trophy: Rank — ${summary.rank}
+:trophy: Rank — ${summary.rank.current} out of ${summary.rank.potential} potential
 :star: Points — ${summary.points}
 :chart_with_upwards_trend: EHP/EHB — ${summary.progress}
-${formatDeductions({ summary })}
+${formatDeranks({ summary })}
 **Milestones:** ${milestones.points} points
 ${formatList(milestones.list)}
 
@@ -41,10 +44,23 @@ ${formatList(collections.list)}
 `;
 }
 
-function leaderboard(ranks) {
-  const summaries = ranks.map(({ rank }) => summary(rank)).join("\n");
+// ------------- LEADERBOARD ------------
+
+function summary({ rsn, summary }) {
+  return (
+    `${rsn.padEnd(12)}` +
+    ` ——— RANK ${String(summary.rank.current).padEnd(2)}` +
+    ` ——— ${String(summary.points).padStart(2)} POINTS` +
+    ` ——— ${String(summary.progress).padStart(4)} EHP/EHB`
+  );
+}
+
+function leaderboard(players) {
+  const summaries = players.map((player) => summary(player)).join("\n");
   return `\`\`\`${summaries}\`\`\``;
 }
+
+// ------------- EXPORTS ------------
 
 export default {
   leaderboard,

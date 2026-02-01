@@ -19,14 +19,14 @@ function getSummary({ collections, milestones, progress, raids }) {
   const points = milestones.points + raids.points + collections.points;
   const pointsRank = getRank(points);
 
-  let rank = progressRank + pointsRank;
+  const potential = progressRank + pointsRank;
 
-  const deductions = Deductions.apply({ milestones, rank });
-  rank = rank - deductions.ranks;
+  const deductions = Deductions.apply({ milestones, rank: potential });
+  const current = potential - deductions.ranks;
 
   return {
     deductions,
-    rank,
+    rank: { current, potential },
     points,
     progress: progress.eh,
   };

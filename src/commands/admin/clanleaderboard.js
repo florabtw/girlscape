@@ -8,7 +8,7 @@ export default {
     .setDescription("Responds with clan leaderboard"),
   async execute(interaction) {
     await interaction.deferReply();
-    const leaderboard = await clan.leaderboard();
-    await interaction.editReply(leaderboard);
+    const { message } = await clan.leaderboard();
+    await interaction.editReply(message);
   },
 };
