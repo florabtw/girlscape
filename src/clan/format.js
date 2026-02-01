@@ -8,9 +8,9 @@ function formatList(list) {
 }
 
 function formatDeductions({ summary: { deductions } }) {
-  if (!deductions.value) return "";
+  if (!deductions.ranks) return "";
 
-  return `:small_red_triangle_down: Deductions — ${deductions.value}\n`;
+  return `:small_red_triangle_down: Deductions — ${deductions.ranks}\n`;
 }
 
 function summary({ rsn, summary }) {
