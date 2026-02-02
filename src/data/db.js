@@ -33,6 +33,15 @@ export async function getCollectionLog(rsn) {
   );
 }
 
+export async function getPlayerNames() {
+  const db = await getRedisClient();
+  const clanStats = await db.json.get("clan:stats");
+
+  return Object.values(clanStats).map(
+    (player) => player.player_name_with_capitalization || player.player,
+  );
+}
+
 export async function getPets(rsn) {
   const db = await getRedisClient();
   const clanPets = await db.json.get("clan:pets");
