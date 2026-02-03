@@ -1,33 +1,61 @@
 import { SlashCommandBuilder } from "discord.js";
 
+import Autocomplete from "#utils/autocomplete.js";
 import clan from "#clan/clan.js";
 import { normalizeRsn, verifiedOptions } from "#clan/rank/utils.js";
 
-export default {
-  data: new SlashCommandBuilder()
+function genCommand() {
+  const command = new SlashCommandBuilder()
     .setName("clanunverify")
-    .setDescription("Remove milestone from user.")
-    .addStringOption((option) =>
-      option.setName("rsn").setDescription("osrsusername").setRequired(true),
-    )
+    .setDescription("Remove milestones from user.")
     .addStringOption((option) =>
       option
-        .setName("milestone")
-        .setDescription("milestone shortname")
+        .setName("player")
+        .setDescription("osrs username")
         .setRequired(true)
+        .setAutocomplete(true),
+    );
+
+  for (let i = 1; i <= 10; i++) {
+    command.addStringOption((option) =>
+      option
+        .setName(`milestone${i}`)
+        .setDescription("milestone to remove")
         .addChoices(verifiedOptions),
-    ),
+    );
+  }
+
+  return command;
+}
+
+function getMilestones(interaction) {
+  let milestones = [];
+  for (let i = 1; i <= 10; i++) {
+    const milestone = interaction.options.getString(`milestone${i}`);
+    if (milestone?.length > 0) milestones.push(milestone);
+  }
+  return milestones;
+}
+
+export default {
+  data: genCommand(),
+  async autocomplete(interaction) {
+    const focusedOption = interaction.options.getFocused(true);
+
+    if (focusedOption.name === "player") {
+      await Autocomplete.name(interaction);
+    }
+  },
   async execute(interaction) {
     await interaction.deferReply();
 
-    const rsn = normalizeRsn(interaction.options.getString("rsn"));
-    const milestone = interaction.options.getString("milestone");
+    const player = normalizeRsn(interaction.options.getString("player"));
+    const milestones = getMilestones(interaction);
 
     try {
-      await clan.unverify(rsn, milestone);
-
+      await clan.unverify(player, milestones);
       await interaction.editReply(
-        `:white_check_mark: Removed ${milestone} from player ${rsn}`,
+        `:white_check_mark: Removed milestones from player ${player}: ${milestones.join(", ")}`,
       );
     } catch (err) {
       await interaction.editReply(err.toString());

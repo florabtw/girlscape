@@ -1,6 +1,7 @@
 import { SlashCommandBuilder } from "discord.js";
 import Fuse from "fuse.js";
 
+import Autocomplete from "#utils/autocomplete.js";
 import { getClanEvents, getPlayerNames } from "#data/db.js";
 import events from "#events/events.js";
 
@@ -83,36 +84,11 @@ export default {
   async autocomplete(interaction) {
     const focusedOption = interaction.options.getFocused(true);
 
-    let options;
     if (focusedOption.name === "id") {
-      const events = Object.values(await getClanEvents());
-
-      if (!focusedOption.value) {
-        options = events.map((event) => ({
-          name: event.name,
-          value: event.id,
-        }));
-      } else {
-        const fuse = new Fuse(events, { keys: ["id", "name"] });
-        const items = fuse.search(focusedOption.value);
-        options = items.map((opt) => ({
-          name: opt.item.name,
-          value: opt.item.id,
-        }));
-      }
+      await Autocomplete.event(interaction);
     } else if (focusedOption.name.startsWith("player")) {
-      const names = await getPlayerNames();
-
-      if (!focusedOption.value) {
-        options = names.map((name) => ({ name, value: name }));
-      } else {
-        const fuse = new Fuse(names);
-        const items = fuse.search(focusedOption.value);
-        options = items.map((opt) => ({ name: opt.item, value: opt.item }));
-      }
+      await Autocomplete.name(interaction);
     }
-
-    await interaction.respond(options);
   },
   async execute(interaction) {
     await interaction.deferReply();

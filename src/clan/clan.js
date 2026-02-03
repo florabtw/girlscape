@@ -105,7 +105,7 @@ async function verify(rsn, milestones) {
   );
 }
 
-async function unverify(rsn, milestone) {
+async function unverify(rsn, milestones) {
   const db = await getRedisClient();
 
   const stats = await getStats(rsn);
@@ -114,14 +114,16 @@ async function unverify(rsn, milestone) {
   const verifieds = (await db.json.get("clan:verifieds")) || {};
 
   const playerVerified = verifieds[rsn] || {};
-  playerVerified[milestone] = false;
+  for (const milestone of milestones) {
+    playerVerified[milestone] = false;
+  }
 
   verifieds[rsn] = playerVerified;
 
   await db.json.set("clan:verifieds", "$", verifieds);
 
   console.log(
-    `Unverified ${rsn} ${milestone}. Player verifieds: `,
+    `Unverified ${rsn} ${milestones.join(", ")}. Player verifieds: `,
     JSON.stringify(playerVerified, null, 2),
   );
 }
