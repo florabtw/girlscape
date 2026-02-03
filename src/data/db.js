@@ -15,6 +15,12 @@ export async function getRedisClient() {
   return db;
 }
 
+export async function getClanEvents() {
+  const db = await getRedisClient();
+  const events = await db.json.get("clan:events");
+  return events;
+}
+
 export async function getStats(rsn) {
   const db = await getRedisClient();
   const clanStats = await db.json.get("clan:stats");
@@ -31,6 +37,13 @@ export async function getCollectionLog(rsn) {
   return clanCollectionLog.members.find(
     (member) => member.player.toLowerCase() === rsn,
   );
+}
+
+export async function getNormalizedPlayerNames() {
+  const db = await getRedisClient();
+  const clanStats = await db.json.get("clan:stats");
+
+  return Object.keys(clanStats).map((key) => key.toLowerCase());
 }
 
 export async function getPlayerNames() {
