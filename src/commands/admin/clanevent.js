@@ -60,7 +60,16 @@ export default {
       subcommand.setName("list").setDescription("List all events"),
     )
     .addSubcommand((subcommand) =>
-      subcommand.setName("info").setDescription("Show details for event"),
+      subcommand
+        .setName("info")
+        .setDescription("Show details for event")
+        .addStringOption((option) =>
+          option
+            .setName("id")
+            .setDescription("Event ID")
+            .setAutocomplete(true)
+            .setRequired(true),
+        ),
     )
     .addSubcommand(
       multiplayerSubcommand("addplayer", "Adds players to event", 24),
@@ -116,13 +125,20 @@ export default {
     } else if (subcommand === "list") {
       message = await events.list();
     } else if (subcommand === "info") {
-      // TODO
+      const eventId = interaction.options.getString("id");
+      message = await events.info(eventId);
     } else if (subcommand === "addplayer") {
       const id = interaction.options.getString("id");
-      const players = getPlayers(interaction.options, 25);
+      const players = getPlayers(interaction.options, 24);
       message = await events.addPlayers(id, players);
     } else if (subcommand === "remplayer") {
-    } else if (subcommand === "winner") {
+      const id = interaction.options.getString("id");
+      const players = getPlayers(interaction.options, 24);
+      message = await events.remPlayers(id, players);
+    } else if (subcommand === "setwinner") {
+      const id = interaction.options.getString("id");
+      const players = getPlayers(interaction.options, 24);
+      message = await events.setWinners(id, players);
     }
 
     await interaction.editReply(message);
