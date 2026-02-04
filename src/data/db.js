@@ -18,7 +18,7 @@ export async function getRedisClient() {
 export async function getClanEvents() {
   const db = await getRedisClient();
   const events = await db.json.get("clan:events");
-  return events;
+  return events || {};
 }
 
 export async function getPlayerEvents(player) {

@@ -4,7 +4,7 @@ import Format from "./format.js";
 
 async function addPlayers(id, players) {
   const db = await getRedisClient();
-  const events = await db.json.get("clan:events");
+  const events = (await db.json.get("clan:events")) || {};
   const event = events[id];
 
   if (!event) return `:x: Event not found: ${id}`;
@@ -63,7 +63,7 @@ async function list() {
 
 async function remPlayers(id, players) {
   const db = await getRedisClient();
-  const events = await db.json.get("clan:events");
+  const events = (await db.json.get("clan:events")) || {};
   const event = events[id];
 
   if (!event) return `:x: Event not found: ${id}`;
