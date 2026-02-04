@@ -6,6 +6,7 @@ import { normalizeRsn } from "#clan/rank/utils.js";
 import {
   getCollectionLog,
   getPets,
+  getPlayerEvents,
   getRedisClient,
   getStats,
   getVerifieds,
@@ -41,12 +42,20 @@ async function leaderboard() {
 
   let players = [];
   for (const rsn of playerNames) {
-    const stats = await getStats(rsn);
     const collectionLog = await getCollectionLog(rsn);
+    const events = await getPlayerEvents(rsn);
     const pets = await getPets(rsn);
+    const stats = await getStats(rsn);
     const verifieds = await getVerifieds(rsn);
 
-    const player = Rank.player({ collectionLog, pets, stats, verifieds });
+    const player = Rank.player({
+      collectionLog,
+      events,
+      pets,
+      stats,
+      verifieds,
+    });
+
     players.push(player);
   }
 

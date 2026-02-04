@@ -21,6 +21,15 @@ export async function getClanEvents() {
   return events;
 }
 
+export async function getPlayerEvents(player) {
+  const events = Object.values(await getClanEvents());
+
+  const played = events.filter((event) => event.players.includes(player));
+  const won = events.filter((event) => event.winners.includes(player));
+
+  return { played, won };
+}
+
 export async function getEvent(id) {
   const db = await getRedisClient();
   const events = await db.json.get("clan:events");

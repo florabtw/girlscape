@@ -26,7 +26,8 @@ function formatDeranks({ summary: { deductions, displacements } }) {
 }
 
 function player(player) {
-  const { collections, milestones, progress, raids, rsn, summary } = player;
+  const { collections, events, milestones, progress, raids, rsn, summary } =
+    player;
 
   return `**Clan Member**: ${rsn}
 :trophy: Rank — ${summary.rank.current} out of ${summary.rank.potential} potential
@@ -41,6 +42,9 @@ ${formatList(raids.list)}
 
 **Collection Logging:** ${collections.points} points
 ${formatList(collections.list)}
+
+**Events:** ${events.points} points
+${formatList(events.list)}
 `;
 }
 

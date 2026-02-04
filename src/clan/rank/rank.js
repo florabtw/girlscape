@@ -1,5 +1,6 @@
 import Collections from "./collections.js";
 import Deductions from "./deductions.js";
+import Events from "./events.js";
 import Milestones from "./milestones.js";
 import Progress from "./progress.js";
 import Raids from "./raids.js";
@@ -7,16 +8,17 @@ import Raids from "./raids.js";
 const POINTS_RANKS = [2, 4, 6, 8, 10, 15, 20, 25, 35, 40, 45, 50];
 
 function getRank(points) {
-  const rank = POINTS_RANKS.findIndex((val) => val > points);
+  let rank = POINTS_RANKS.findIndex((val) => val > points);
 
   if (rank < 0) rank = 12; // max rank
 
   return rank;
 }
 
-function getSummary({ collections, milestones, progress, raids }) {
+function getSummary({ collections, events, milestones, progress, raids }) {
   const progressRank = progress.rank;
-  const points = milestones.points + raids.points + collections.points;
+  const points =
+    collections.points + events.points + milestones.points + raids.points;
   const pointsRank = getRank(points);
 
   const potential = progressRank + pointsRank;
@@ -32,17 +34,26 @@ function getSummary({ collections, milestones, progress, raids }) {
   };
 }
 
-function player({ collectionLog, stats, pets, verifieds }) {
+function player({ collectionLog, events, pets, stats, verifieds }) {
+  const events_ = Events.player({ events });
   const progress = Progress.player({ stats });
   const milestones = Milestones.player({ collectionLog, stats, verifieds });
   const raids = Raids.player({ collectionLog, stats });
   const collections = Collections.player({ pets, stats });
 
-  const summary = getSummary({ collections, milestones, progress, raids });
+  const summary = getSummary({
+    collections,
+    events: events_,
+    milestones,
+    progress,
+    raids,
+  });
+
   const rsn = stats.player_name_with_capitalization || stats.player;
 
   return {
     collections,
+    events: events_,
     milestones,
     progress,
     raids,
