@@ -5,6 +5,7 @@ import temple from "#clan/temple.js";
 import { normalizeRsn } from "#clan/rank/utils.js";
 import {
   getCollectionLog,
+  getMissingNames,
   getPets,
   getPlayerEvents,
   getRedisClient,
@@ -65,6 +66,34 @@ async function leaderboard() {
   const message = Format.leaderboard(players);
 
   return { players, message };
+}
+
+async function nameChange(oldRsn, newRsn) {
+  const { localOnly, remoteOnly } = await getMissingNames();
+
+  const db = await getRedisClient();
+  const verifieds = (await db.json.get("clan:verifieds")) || {};
+
+  if (verifieds[oldRsn]) {
+    verifieds[newRsn] = verifieds[oldRsn];
+    delete verifieds[oldRsn];
+  }
+
+  let events = (await db.json.get("clan:events")) || {};
+  events = Object.fromEntries(
+    Object.entries(events).map(([key, event]) => {
+      event.players = event.players.map((p) => (p === oldRsn ? newRsn : p));
+      event.winners = event.winners.map((p) => (p === oldRsn ? newRsn : p));
+      return [key, event];
+    }),
+  );
+
+  db.json.set("clan:verifieds", "$", verifieds);
+  db.json.set("clan:events", "$", events);
+
+  return {
+    message: `:white_check_mark: Updated name from ${oldRsn} to ${newRsn}.`,
+  };
 }
 
 function wait(ms) {
@@ -139,6 +168,7 @@ async function unverify(rsn, milestones) {
 
 export default {
   leaderboard,
+  nameChange,
   rank,
   unverify,
   update,

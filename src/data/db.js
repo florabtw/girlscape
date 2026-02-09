@@ -54,6 +54,27 @@ export async function getCollectionLog(rsn) {
   );
 }
 
+export async function getMissingNames() {
+  const db = await getRedisClient();
+  const clanEvents = (await db.json.get("clan:events")) || {};
+  const eventNames = Object.values(clanEvents).reduce(
+    (names, event) =>
+      names.union(new Set(event.players)).union(new Set(event.winners)),
+    new Set(),
+  );
+
+  const clanVerifieds = (await db.json.get("clan:verifieds")) || {};
+  const verifiedNames = new Set(Object.keys(clanVerifieds));
+
+  const localNames = eventNames.union(verifiedNames);
+  const templeNames = new Set(await getNormalizedPlayerNames());
+
+  const localOnly = [...localNames.difference(templeNames)];
+  const remoteOnly = [...templeNames.difference(localNames)];
+
+  return { localOnly, remoteOnly };
+}
+
 export async function getNormalizedPlayerNames() {
   const db = await getRedisClient();
   const clanStats = await db.json.get("clan:stats");

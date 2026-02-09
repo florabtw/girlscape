@@ -1,6 +1,6 @@
 import Fuse from "fuse.js";
 
-import { getClanEvents, getPlayerNames } from "#data/db.js";
+import { getClanEvents, getMissingNames, getPlayerNames } from "#data/db.js";
 
 async function event(interaction) {
   const focusedValue = interaction.options.getFocused();
@@ -27,6 +27,7 @@ async function event(interaction) {
 async function name(interaction) {
   const focusedValue = interaction.options.getFocused();
   const names = await getPlayerNames();
+  names.sort();
 
   let options;
   if (!focusedValue) {
@@ -40,7 +41,43 @@ async function name(interaction) {
   await interaction.respond(options);
 }
 
+async function oldName(interaction) {
+  const focusedValue = interaction.options.getFocused();
+  const { localOnly } = await getMissingNames();
+  localOnly.sort();
+
+  let options;
+  if (!focusedValue) {
+    options = localOnly.map((name) => ({ name, value: name }));
+  } else {
+    const fuse = new Fuse(localOnly);
+    const items = fuse.search(focusedValue);
+    options = items.map((opt) => ({ name: opt.item, value: opt.item }));
+  }
+
+  await interaction.respond(options);
+}
+
+async function newName(interaction) {
+  const focusedValue = interaction.options.getFocused();
+  const { remoteOnly } = await getMissingNames();
+  remoteOnly.sort();
+
+  let options;
+  if (!focusedValue) {
+    options = remoteOnly.map((name) => ({ name, value: name }));
+  } else {
+    const fuse = new Fuse(remoteOnly);
+    const items = fuse.search(focusedValue);
+    options = items.map((opt) => ({ name: opt.item, value: opt.item }));
+  }
+
+  await interaction.respond(options);
+}
+
 export default {
   event,
   name,
+  newName,
+  oldName,
 };
