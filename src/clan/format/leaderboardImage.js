@@ -1,11 +1,39 @@
 import { AttachmentBuilder } from "discord.js";
 import Canvas, { GlobalFonts, DOMMatrix } from "@napi-rs/canvas";
 
-// function rankIcon({ summary }) {
-//   const env = process.env.NODE_ENV || "development";
-//   const rank = summary.rank.current;
-//   return RankIcon[env][Math.max(rank - 1, 0)];
-// }
+const Ranks = [
+  "Burnt",
+  "Illusionist",
+  "Champion",
+  "Explorer",
+  "Specialist",
+  "Trickster",
+  "Councillor",
+  "Pure",
+  "Adventurer",
+  "Artisan",
+  "Witch",
+  "Teacher",
+  "Trialist",
+  "Completionist",
+  "Ignitor",
+  "Warlock",
+  "Assistant",
+  "Hero",
+  "Raider",
+  "Legacy",
+  "Seer",
+  "Coordinator",
+  "Defiler",
+  "Elite",
+];
+
+function getRankIcon({ summary }) {
+  const rank = summary.rank.current;
+  const rankName = Ranks[Math.max(rank - 1, 0)];
+  const path = `./src/images/ranks/Rank_${rankName}.png`;
+  return { path, width: 24, height: 24 };
+}
 
 const WIDTH = 800;
 
@@ -49,6 +77,7 @@ function renderTitle(canvas) {
 const columns = [
   {
     align: "left",
+    icon: (player) => getRankIcon(player),
     header: "Player",
     value: (player) => player.rsn,
     width: (w) => w * 0.25,
@@ -83,7 +112,7 @@ function textAlign({ align, end, start, textWidth }) {
   }
 }
 
-function renderBoard(canvas, players) {
+async function renderBoard(canvas, players) {
   const context = canvas.getContext("2d");
 
   context.font = `${TEXT_HEIGHT}px DejaVu Sans Mono`;
@@ -114,6 +143,21 @@ function renderBoard(canvas, players) {
     context.font = `${TEXT_HEIGHT}px DejaVu Sans Mono`;
     for (let j = 0; j < players.length; j++) {
       const player = players[j];
+
+      const y = yStart + HEADER_LINE_HEIGHT + (j + 1) * TEXT_LINE_HEIGHT;
+
+      const icon = "icon" in column && column.icon(player);
+      if (icon) {
+        const image = await Canvas.loadImage(icon.path);
+        context.drawImage(
+          image,
+          columnXStart - icon.width - 8,
+          y - icon.height + 4,
+          icon.width,
+          icon.height,
+        );
+      }
+
       const text = column.value(player);
       const textWidth = context.measureText(text).width;
       const x = textAlign({
@@ -122,7 +166,6 @@ function renderBoard(canvas, players) {
         start: columnXStart,
         end: columnXEnd,
       });
-      const y = yStart + HEADER_LINE_HEIGHT + (j + 1) * TEXT_LINE_HEIGHT;
 
       context.fillText(text, x, y);
     }
@@ -145,7 +188,7 @@ export default async function leaderboardImage(players) {
 
   renderBackground(canvas);
   renderTitle(canvas);
-  renderBoard(canvas, players);
+  await renderBoard(canvas, players);
 
   const attachment = new AttachmentBuilder(await canvas.encode("png"), {
     name: "leaderboard.png",
