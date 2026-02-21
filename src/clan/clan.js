@@ -1,4 +1,4 @@
-import Format from "#clan/format.js";
+import Format from "#clan/format/index.js";
 import Rank from "#clan/rank/rank.js";
 import TopFive from "#clan/rank/topfive.js";
 import temple from "#clan/temple.js";
@@ -63,7 +63,7 @@ async function leaderboard() {
   players.sort(byRank);
   players = TopFive.apply(players);
 
-  const message = Format.leaderboard(players);
+  const message = await Format.leaderboardImage(players);
 
   return { players, message };
 }

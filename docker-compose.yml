@@ -1,5 +1,7 @@
 services:
   girlscape:
+    environment:
+      - NODE_ENV=development
     container_name: girlscape
     image: floramoon/girlscape:latest
     restart: unless-stopped

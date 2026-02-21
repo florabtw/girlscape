@@ -9,6 +9,6 @@ export default {
   async execute(interaction) {
     await interaction.deferReply();
     const { message } = await clan.leaderboard();
-    await interaction.editReply(message);
+    await interaction.editReply({ files: [message] });
   },
 };

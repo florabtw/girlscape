@@ -1,5 +1,3 @@
-// ------------- RANK ------------
-
 function formatList(list) {
   return list
     .map((item) => {
@@ -25,11 +23,10 @@ function formatDeranks({ summary: { deductions, displacements } }) {
   return msg;
 }
 
-function player(player) {
-  const { collections, events, milestones, progress, raids, rsn, summary } =
-    player;
+export default function player(player) {
+  const { collections, events, milestones, raids, rsn, summary } = player;
 
-  return `**Clan Member**: ${rsn}
+  return `**Clan Member**: ${rankIcon(player)} ${rsn}
 :trophy: Rank — ${summary.rank.current} out of ${summary.rank.potential} potential
 :star: Points — ${summary.points}
 :chart_with_upwards_trend: EHP/EHB — ${summary.progress}
@@ -47,26 +44,3 @@ ${formatList(collections.list)}
 ${formatList(events.list)}
 `;
 }
-
-// ------------- LEADERBOARD ------------
-
-function summary({ rsn, summary }) {
-  return (
-    `${rsn.padEnd(12)}` +
-    ` ——— RANK ${String(summary.rank.current).padEnd(2)}` +
-    ` ——— ${String(summary.points).padStart(2)} POINTS` +
-    ` ——— ${String(summary.progress).padStart(4)} EHP/EHB`
-  );
-}
-
-function leaderboard(players) {
-  const summaries = players.map((player) => summary(player)).join("\n");
-  return `\`\`\`${summaries}\`\`\``;
-}
-
-// ------------- EXPORTS ------------
-
-export default {
-  leaderboard,
-  player,
-};
