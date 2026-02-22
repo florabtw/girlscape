@@ -1,5 +1,5 @@
 import { AttachmentBuilder } from "discord.js";
-import Canvas, { GlobalFonts, DOMMatrix } from "@napi-rs/canvas";
+import Canvas from "@napi-rs/canvas";
 
 const Ranks = [
   "Burnt",
@@ -44,17 +44,23 @@ const HEADER_HEIGHT = 32;
 const HEADER_LINE_HEIGHT = 40;
 
 const TEXT_HEIGHT = 24;
-const TEXT_LINE_HEIGHT = 32;
+const TEXT_LINE_HEIGHT = 36;
 
-const PADDING_IN = 30;
+const PADDING_IN = 60;
 const PADDING_X_OUT = 90;
 const PADDING_Y_OUT = 60;
 
-function renderBackground(canvas) {
+async function renderBackground(canvas) {
   const context = canvas.getContext("2d");
 
-  context.fillStyle = "#400B66";
+  context.fillStyle = "#966FD6";
   context.fillRect(0, 0, canvas.width, canvas.height);
+
+  const radiantImage = await Canvas.loadImage("./src/images/radiant.png");
+  context.drawImage(radiantImage, 60, 15, 80, 160);
+
+  const fashionImage = await Canvas.loadImage("./src/images/fashion.png");
+  context.drawImage(fashionImage, PADDING_X_OUT + WIDTH - 50, 15, 80, 160);
 }
 
 function renderTitle(canvas) {
@@ -85,19 +91,22 @@ const columns = [
   {
     align: "right",
     header: "Rank",
-    value: (player) => String(player.summary.rank.current).padStart(2),
+    value: (player) =>
+      String(player.summary.rank.current).padStart(4).padStart(12, "·"),
     width: (w) => w * 0.25,
   },
   {
     align: "right",
     header: "Points",
-    value: (player) => String(player.summary.points).padStart(2),
+    value: (player) =>
+      String(player.summary.points).padStart(4).padStart(12, "·"),
     width: (w) => w * 0.25,
   },
   {
     align: "right",
     header: "EHP/EHB",
-    value: (player) => String(player.summary.progress).padStart(4),
+    value: (player) =>
+      String(player.summary.progress).padStart(6).padStart(12, "·"),
     width: (w) => w * 0.25,
   },
 ];
@@ -186,7 +195,7 @@ export default async function leaderboardImage(players) {
 
   const canvas = Canvas.createCanvas(PADDING_X_OUT * 2 + WIDTH, maxHeight);
 
-  renderBackground(canvas);
+  await renderBackground(canvas);
   renderTitle(canvas);
   await renderBoard(canvas, players);
 
