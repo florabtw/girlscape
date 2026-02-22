@@ -26,7 +26,7 @@ function formatDeranks({ summary: { deductions, displacements } }) {
 export default function player(player) {
   const { collections, events, milestones, raids, rsn, summary } = player;
 
-  return `**Clan Member**: ${rankIcon(player)} ${rsn}
+  return `**Clan Member**: ${rsn}
 :trophy: Rank — ${summary.rank.current} out of ${summary.rank.potential} potential
 :star: Points — ${summary.points}
 :chart_with_upwards_trend: EHP/EHB — ${summary.progress}
