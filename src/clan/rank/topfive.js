@@ -19,6 +19,7 @@ function apply(ranks) {
     }
 
     i++;
+    j = i + 1;
   }
 
   return ranks;
