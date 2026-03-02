@@ -2,6 +2,9 @@ import Fuse from "fuse.js";
 
 import { getClanEvents, getMissingNames, getPlayerNames } from "#data/db.js";
 
+const caseInsensitive = (a, b) =>
+  a.localeCompare(b, undefined, { sensitivity: "base" });
+
 async function event(interaction) {
   const focusedValue = interaction.options.getFocused();
   const events = Object.values(await getClanEvents());
@@ -21,13 +24,15 @@ async function event(interaction) {
     }));
   }
 
+  options = options.slice(0, 25);
+
   await interaction.respond(options);
 }
 
 async function name(interaction) {
   const focusedValue = interaction.options.getFocused();
   const names = await getPlayerNames();
-  names.sort();
+  names.sort(caseInsensitive);
 
   let options;
   if (!focusedValue) {
@@ -38,13 +43,15 @@ async function name(interaction) {
     options = items.map((opt) => ({ name: opt.item, value: opt.item }));
   }
 
+  options = options.slice(0, 25);
+
   await interaction.respond(options);
 }
 
 async function oldName(interaction) {
   const focusedValue = interaction.options.getFocused();
   const { localOnly } = await getMissingNames();
-  localOnly.sort();
+  localOnly.sort(caseInsensitive);
 
   let options;
   if (!focusedValue) {
@@ -55,13 +62,15 @@ async function oldName(interaction) {
     options = items.map((opt) => ({ name: opt.item, value: opt.item }));
   }
 
+  options = options.slice(0, 25);
+
   await interaction.respond(options);
 }
 
 async function newName(interaction) {
   const focusedValue = interaction.options.getFocused();
   const { remoteOnly } = await getMissingNames();
-  remoteOnly.sort();
+  remoteOnly.sort(caseInsensitive);
 
   let options;
   if (!focusedValue) {
@@ -71,6 +80,8 @@ async function newName(interaction) {
     const items = fuse.search(focusedValue);
     options = items.map((opt) => ({ name: opt.item, value: opt.item }));
   }
+
+  options = options.slice(0, 25);
 
   await interaction.respond(options);
 }
