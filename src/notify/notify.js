@@ -12,9 +12,10 @@ async function rankChange(players) {
   for (const currentPlayer of players) {
     const lastPlayer = lastLeaderboard.find((p) => p.rsn === currentPlayer.rsn);
 
-    if (
-      currentPlayer.summary.rank.current !== lastPlayer.summary.rank.current
-    ) {
+    const currentRank = currentPlayer.summary.rank.current;
+    const lastRank = lastPlayer?.summary.rank.current;
+
+    if (currentRank !== lastRank) {
       await Webhook.rankChange({ currentPlayer, lastPlayer });
     }
   }
