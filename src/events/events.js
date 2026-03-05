@@ -89,6 +89,22 @@ async function remPlayers(id, players) {
   return Format.remPlayers(event, output);
 }
 
+async function rename(id, name) {
+  const db = await getRedisClient();
+  const events = (await db.json.get("clan:events")) || {};
+
+  let event = events[id];
+
+  if (!event) return `:x: Event not found: ${id}`;
+
+  event.name = name;
+  events[id] = event;
+
+  await db.json.set("clan:events", "$", events);
+
+  return `:white_check_mark: Renamed event:\n ${Format.summary(event)}`;
+}
+
 async function setWinners(id, players) {
   const db = await getRedisClient();
   const events = await db.json.get("clan:events");
@@ -115,5 +131,6 @@ export default {
   info,
   list,
   remPlayers,
+  rename,
   setWinners,
 };

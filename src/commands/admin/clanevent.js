@@ -58,6 +58,21 @@ export default {
         ),
     )
     .addSubcommand((subcommand) =>
+      subcommand
+        .setName("rename")
+        .setDescription("Rename an event")
+        .addStringOption((option) =>
+          option
+            .setName("id")
+            .setDescription("Event ID")
+            .setAutocomplete(true)
+            .setRequired(true),
+        )
+        .addStringOption((option) =>
+          option.setName("name").setDescription("Event name").setRequired(true),
+        ),
+    )
+    .addSubcommand((subcommand) =>
       subcommand.setName("list").setDescription("List all events"),
     )
     .addSubcommand((subcommand) =>
@@ -98,6 +113,10 @@ export default {
       const eventId = interaction.options.getString("id");
       const name = interaction.options.getString("name");
       message = await events.create(eventId, name);
+    } else if (subcommand === "rename") {
+      const eventId = interaction.options.getString("id");
+      const name = interaction.options.getString("name");
+      message = await events.rename(eventId, name);
     } else if (subcommand === "list") {
       message = await events.list();
     } else if (subcommand === "info") {
