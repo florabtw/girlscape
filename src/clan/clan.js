@@ -1,11 +1,11 @@
 import Format from "#clan/format/index.js";
+import Notify from "#notify/notify.js";
 import Rank from "#clan/rank/rank.js";
 import TopFive from "#clan/rank/topfive.js";
 import temple from "#clan/temple.js";
 import { normalizeRsn } from "#clan/rank/utils.js";
 import {
   getCollectionLog,
-  getMissingNames,
   getPets,
   getPlayerEvents,
   getRedisClient,
@@ -63,14 +63,14 @@ async function leaderboard() {
   players.sort(byRank);
   players = TopFive.apply(players);
 
+  await Notify.rankChange(players);
+
   const message = await Format.leaderboardImage(players);
 
   return { players, message };
 }
 
 async function nameChange(oldRsn, newRsn) {
-  const { localOnly, remoteOnly } = await getMissingNames();
-
   const db = await getRedisClient();
   const verifieds = (await db.json.get("clan:verifieds")) || {};
 

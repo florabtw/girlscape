@@ -1,39 +1,6 @@
-import { AttachmentBuilder } from "discord.js";
 import Canvas from "@napi-rs/canvas";
-
-const Ranks = [
-  "Burnt",
-  "Illusionist",
-  "Champion",
-  "Explorer",
-  "Specialist",
-  "Trickster",
-  "Councillor",
-  "Pure",
-  "Adventurer",
-  "Artisan",
-  "Witch",
-  "Teacher",
-  "Trialist",
-  "Completionist",
-  "Ignitor",
-  "Warlock",
-  "Assistant",
-  "Hero",
-  "Raider",
-  "Legacy",
-  "Seer",
-  "Coordinator",
-  "Defiler",
-  "Elite",
-];
-
-function getRankIcon({ summary }) {
-  const rank = summary.rank.current;
-  const rankName = Ranks[Math.max(rank - 1, 0)];
-  const path = `./src/images/ranks/Rank_${rankName}.png`;
-  return { path, width: 24, height: 24 };
-}
+import { AttachmentBuilder } from "discord.js";
+import { getRankIcon } from "#utils/icon.js";
 
 const WIDTH = 800;
 
@@ -83,7 +50,11 @@ function renderTitle(canvas) {
 const columns = [
   {
     align: "left",
-    icon: (player) => getRankIcon(player),
+    icon: (player) => ({
+      path: getRankIcon(player).path,
+      width: 24,
+      height: 24,
+    }),
     header: "Player",
     value: (player) => player.rsn,
     width: (w) => w * 0.25,
