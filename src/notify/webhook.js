@@ -30,7 +30,7 @@ async function rankChange({ currentPlayer, lastPlayer }) {
     .addFields({
       inline: true,
       name: "Previous Rank",
-      value: String(lastPlayer.summary.rank.current),
+      value: lastPlayer ? String(lastPlayer.summary.rank.current) : "n/a",
     })
     .addFields({
       inline: true,
