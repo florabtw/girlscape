@@ -2,16 +2,15 @@
 
 Largely follows paradigms from discord.js getting started guide: https://discordjs.guide/legacy
 
-
 ## Dev Setup
 
-Create your own discord bot in [Discord Developer Portal](https://discord.com/developers/applications).
-
-From the OAuth2 page, create an invite url with "bot" scope, and "Send Messages"
-text permissions, and invite your bot to a test server.
-
-Copy `env.sample` to `.env` and fill in values from Developer portal, and your
-local redis install.
+1. Create a private test discord server in discord.
+1. Create a discord bot in [Discord Developer Portal](https://discord.com/developers/applications).
+1. From the OAuth2 page, create an invite url with "bot" scope, and "Send Messages"
+text permissions, and invite your bot to your test server.
+4. Copy `env.sample` to `.env` and fill in values from Developer portal, and your
+local redis install (optional if not using docker)
+5. Run the bot, and test if it works by running `/clanupdate` in your test server.
 
 ### Run Locally
 
