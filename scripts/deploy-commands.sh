@@ -1,3 +1,3 @@
 #! /bin/bash
 
-node src/deploy-commands.js
+node src/deploy-commands.ts

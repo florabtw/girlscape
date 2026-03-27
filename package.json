@@ -3,16 +3,29 @@
   "version": "1.10.3",
   "description": "girlscape bot",
   "license": "ISC",
-  "author": "",
+  "author": "some cool girl",
+  "contributors": [
+    {
+      "name": "hannah",
+      "email": "hannah@harubex.com",
+      "url": "https://github.com/harubex"
+    }
+  ],
   "type": "module",
-  "main": "index.js",
+  "main": "index.ts",
+  "engines": {
+    "node": ">=23.6.0",
+    "npm": ">=7.0.0"
+  },
   "imports": {
     "#*": "./src/*"
   },
   "scripts": {
     "commands:deploy:dev": "NODE_ENV=development ./scripts/deploy-commands.sh",
     "commands:deploy:prod": "NODE_ENV=production ./scripts/deploy-commands.sh",
-    "bot:run": "node src/index.js",
+    "bot:run": "npm i && npx -y tsx src/index.ts",
+    "docker:commands": "docker exec girlscape /usr/src/app/scripts/deploy-commands.sh",
+    "start": "npm run bot:run",
     "postversion": "./scripts/postversion.sh"
   },
   "dependencies": {
@@ -22,5 +35,10 @@
     "fuse.js": "^7.1.0",
     "prettier": "^3.8.1",
     "redis": "^5.10.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.9",
+    "@types/node": "^25.5.0",
+    "typescript": "^6.0.2"
   }
 }
