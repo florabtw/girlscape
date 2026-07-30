@@ -26,8 +26,8 @@ function getRaidLevels({ collectionLog, stats }) {
   let raidLevels = [];
   for (let { name, fn, points } of raidLevelsAvailable) {
     const hasRequirement = fn({ collectionLog, stats });
-    if (!hasRequirement) points = 0;
-    raidLevels.push({ name, points });
+    const score = hasRequirement ? points : 0;
+    raidLevels.push({ name, points: score, pointsAvailable: points });
   }
   return raidLevels;
 }

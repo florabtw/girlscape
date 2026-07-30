@@ -2,7 +2,12 @@ function formatList(list) {
   return list
     .map((item) => {
       const emoji = item.points ? ":green_circle:" : ":black_circle:";
-      return `${emoji} ${item.name}` + ` — ${item.points} points`;
+      const points =
+        "pointsAvailable" in item
+          ? `${item.points} of ${item.pointsAvailable}`
+          : item.points;
+
+      return `${emoji} ${item.name}` + ` — ${points} points`;
     })
     .join("\n");
 }

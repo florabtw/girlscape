@@ -47,3 +47,10 @@ to Docker Hub.
 npm version patch # or minor, major
 ./scripts/docker.sh deploy
 ```
+
+Deploy Commands:
+
+```
+npm run commands:deploy:prod # prod
+npm run commands:deploy:dev # dev
+```
