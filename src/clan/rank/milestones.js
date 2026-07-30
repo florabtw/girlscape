@@ -66,6 +66,11 @@ const milestonesAvailable = [
     fn: hasVerified("radiant_oathplate"),
     points: 3,
   },
+  {
+    name: "Brutus Slippers",
+    fn: hasVerified("brutus_slippers"),
+    points: 2,
+  },
 ];
 
 function getMilestones({ collectionLog, skills, stats, verifieds }) {

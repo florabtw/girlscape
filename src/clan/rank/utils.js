@@ -28,4 +28,5 @@ export const verifiedOptions = [
   { name: "Grandmaster CAs", value: "cas_grandmaster" },
   { name: "Blood Torva", value: "blood_torva" },
   { name: "Radiant Oathplate", value: "radiant_oathplate" },
+  { name: "Brutus Slippers", value: "brutus_slippers" },
 ];
