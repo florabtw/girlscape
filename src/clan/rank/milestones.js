@@ -66,14 +66,25 @@ const milestonesAvailable = [
     fn: hasVerified("radiant_oathplate"),
     points: 3,
   },
+  {
+    name: "Brutus Slippers",
+    fn: hasVerified("brutus_slippers"),
+    points: 2,
+  },
 ];
 
 function getMilestones({ collectionLog, skills, stats, verifieds }) {
   let milestones = [];
   for (let { isDeductible, name, fn, points } of milestonesAvailable) {
     const hasRequirement = fn({ collectionLog, skills, stats, verifieds });
-    if (!hasRequirement) points = 0;
-    milestones.push({ isDeductible, name, points });
+    const score = hasRequirement ? points : 0;
+
+    milestones.push({
+      isDeductible,
+      name,
+      points: score,
+      pointsAvailable: points,
+    });
   }
   return milestones;
 }
