@@ -94,7 +94,7 @@ export default {
       multiplayerSubcommand("remplayer", "Removes players from event", 24),
     )
     .addSubcommand(
-      multiplayerSubcommand("setwinner", "Sets winners for event", 5),
+      multiplayerSubcommand("setwinner", "Sets winners for event", 24),
     ),
   async autocomplete(interaction) {
     const focusedOption = interaction.options.getFocused(true);
