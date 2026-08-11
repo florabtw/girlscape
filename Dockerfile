@@ -1,4 +1,4 @@
-FROM node:24.12
+FROM node:24
 
 WORKDIR /usr/src/app
 
@@ -11,4 +11,4 @@ RUN yarn install --production --pure-lockfile
 
 ENV NODE_ENV=production
 
-CMD ["pm2-runtime", "start", "src/index.js"]
+CMD ["pm2-runtime", "start", "npm"]

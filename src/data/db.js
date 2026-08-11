@@ -1,17 +1,14 @@
 import { createClient } from "redis";
 
-import config from "#config.js";
+import config from "#config";
 
-let db;
+console.log(config.redis.url);
 
-async function createRedisClient() {
-  db = await createClient({ url: config.redis.url })
-    .on("error", (err) => console.log("Redis Client Error", err))
-    .connect();
-}
+const db = await createClient({ url: config.redis.url })
+  .on("error", (err) => console.log("Redis Client Error", err))
+  .connect();
 
 export async function getRedisClient() {
-  if (!db) await createRedisClient();
   return db;
 }
 
@@ -40,27 +37,22 @@ export async function getStats(rsn) {
   const db = await getRedisClient();
   const clanStats = await db.json.get("clan:stats");
 
-  return Object.values(clanStats).find(
-    (stats) => stats.player.toLowerCase() === rsn,
-  );
+  return Object.values(clanStats).find((stats) => stats.player.toLowerCase() === rsn);
 }
 
 export async function getCollectionLog(rsn) {
   const db = await getRedisClient();
   const clanCollectionLog = await db.json.get("clan:collectionLog");
 
-  return clanCollectionLog.members.find(
-    (member) => member.player.toLowerCase() === rsn,
-  );
+  return clanCollectionLog.members.find((member) => member.player.toLowerCase() === rsn);
 }
 
 export async function getMissingNames() {
   const db = await getRedisClient();
   const clanEvents = (await db.json.get("clan:events")) || {};
   const eventNames = Object.values(clanEvents).reduce(
-    (names, event) =>
-      names.union(new Set(event.players)).union(new Set(event.winners)),
-    new Set(),
+    (names, event) => names.union(new Set(event.players)).union(new Set(event.winners)),
+    new Set()
   );
 
   const clanVerifieds = (await db.json.get("clan:verifieds")) || {};
@@ -86,9 +78,7 @@ export async function getPlayerNames() {
   const db = await getRedisClient();
   const clanStats = await db.json.get("clan:stats");
 
-  return Object.values(clanStats).map(
-    (player) => player.player_name_with_capitalization || player.player,
-  );
+  return Object.values(clanStats).map((player) => player.player_name_with_capitalization || player.player);
 }
 
 export async function getPets(rsn) {

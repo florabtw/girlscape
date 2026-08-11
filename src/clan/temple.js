@@ -4,18 +4,13 @@ const CLAN_ID = 3426;
 // ------------- STATS --------------
 
 async function getClanStats() {
-  const res = await fetch(
-    `${TEMPLE_BASE_URL}/group_member_info.php?id=${CLAN_ID}&skills=1&bosses=1`,
-  );
+  const res = await fetch(`${TEMPLE_BASE_URL}/group_member_info.php?id=${CLAN_ID}&skills=1&bosses=1`);
   const body = await res.json();
-
   return body.data.memberlist;
 }
 
 async function getPlayerStats(rsn) {
-  const res = await fetch(
-    `${TEMPLE_BASE_URL}/player_stats.php?player=${rsn}&bosses=1`,
-  );
+  const res = await fetch(`${TEMPLE_BASE_URL}/player_stats.php?player=${rsn}&bosses=1`);
   const body = await res.json();
   return body.data;
 }
@@ -29,12 +24,10 @@ async function fetchCollectionLogItems() {
   // const res = await fetch(`${TEMPLE_BASE_URL}/collection-log/items.php`);
   // const body = await res.json();
   const { default: body } = await import("./json/itemids.json", {
-    with: { type: "json" },
+    with: { type: "json" }
   });
   clogItems = body.items;
-  clogIds = Object.fromEntries(
-    Object.entries(body.items).map(([k, v]) => [v, k]),
-  );
+  clogIds = Object.fromEntries(Object.entries(body.items).map(([k, v]) => [v, k]));
 }
 
 async function getItemName(id) {
@@ -59,12 +52,12 @@ const clogCategories = [
   "champions_challenge",
   "the_fight_caves",
   "the_inferno",
-  "fortis_colosseum",
+  "fortis_colosseum"
 ].join(",");
 
 async function getPlayerClogs(rsn) {
   const res = await fetch(
-    `${TEMPLE_BASE_URL}/collection-log/player_collection_log.php?player=${rsn}&categories=${clogCategories}`,
+    `${TEMPLE_BASE_URL}/collection-log/player_collection_log.php?player=${rsn}&categories=${clogCategories}`
   );
   const body = await res.json();
 
@@ -77,7 +70,7 @@ async function getPlayerClogs(rsn) {
 
 async function getClanCollectionLogs() {
   const res = await fetch(
-    `${TEMPLE_BASE_URL}/collection-log/group_collection_log.php?group=${CLAN_ID}&categories=${clogCategories}`,
+    `${TEMPLE_BASE_URL}/collection-log/group_collection_log.php?group=${CLAN_ID}&categories=${clogCategories}`
   );
   const body = await res.json();
 
@@ -85,11 +78,9 @@ async function getClanCollectionLogs() {
   const data = body.data;
   const members = await Promise.all(
     data.members.map(async (member) => {
-      member.items = await Promise.all(
-        member.items.map(async (id) => ({ id, name: await getItemName(id) })),
-      );
+      member.items = await Promise.all(member.items.map(async (id) => ({ id, name: await getItemName(id) })));
       return member;
-    }),
+    })
   );
   data.members = members;
 
@@ -98,7 +89,7 @@ async function getClanCollectionLogs() {
 
 async function getClanPets() {
   const res = await fetch(
-    `${TEMPLE_BASE_URL}/collection-log/group_collection_log.php?group=${CLAN_ID}&categories=all_pets`,
+    `${TEMPLE_BASE_URL}/collection-log/group_collection_log.php?group=${CLAN_ID}&categories=all_pets`
   );
   const body = await res.json();
 
@@ -106,11 +97,9 @@ async function getClanPets() {
   const data = body.data;
   const members = await Promise.all(
     data.members.map(async (member) => {
-      member.items = await Promise.all(
-        member.items.map(async (id) => ({ id, name: await getItemName(id) })),
-      );
+      member.items = await Promise.all(member.items.map(async (id) => ({ id, name: await getItemName(id) })));
       return member;
-    }),
+    })
   );
   data.members = members;
 
@@ -124,13 +113,13 @@ export default {
     clan: getClanCollectionLogs,
     player: getPlayerClogs,
     itemName: getItemName,
-    itemId: getItemId,
+    itemId: getItemId
   },
   pets: {
-    clan: getClanPets,
+    clan: getClanPets
   },
   stats: {
     clan: getClanStats,
-    player: getPlayerStats,
-  },
+    player: getPlayerStats
+  }
 };
