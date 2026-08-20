@@ -7,7 +7,7 @@ services:
     restart: unless-stopped
     volumes:
       - .env:/usr/src/app/.env
-      - ./src:/usr/src/app/src
+      - ./src:/usr/src/app/dist
       - ./node_modules:/usr/src/app/node_modules
   redis:
     container_name: redis
