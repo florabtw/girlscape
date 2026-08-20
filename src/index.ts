@@ -9,7 +9,7 @@ import {
   MessageFlags,
 } from "discord.js";
 
-import config from "./config.js";
+import config from "#config";
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 

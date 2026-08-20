@@ -2,14 +2,14 @@ FROM node:24.12
 
 WORKDIR /usr/src/app
 
-RUN npm run build
-
 COPY .env.prod     .env
-COPY dist          dist
 COPY package.json  .
+COPY tsconfig.json tsconfig.json
+COPY src           src
 
-RUN yarn global add pm2
-RUN yarn install --production --pure-lockfile
+RUN npm install
+RUN npm install pm2 -g
+RUN npm run build
 
 ENV NODE_ENV=production
 

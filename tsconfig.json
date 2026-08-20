@@ -5,14 +5,16 @@
     "rootDir": "./src",
     "outDir": "./dist",
 
-    // allow absolute imports
     "paths": {
-      "@/*": ["./src/*"]
+      "#*": ["./src/*"]
     },
 
     // Environment Settings
-    // See also https://aka.ms/tsconfig/module
-    "module": "nodenext",
+    "allowJs": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    // "moduleResolution": "bundler",
+    // "noEmit": false,
     "target": "esnext",
     "types": [],
 
@@ -21,9 +23,9 @@
     "types": ["node"],
 
     // Other Outputs
-    "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
+    // "sourceMap": true,
+    // "declaration": true,
+    // "declarationMap": true,
 
     // Stricter Typechecking Options
     "noUncheckedIndexedAccess": true,
@@ -45,5 +47,8 @@
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true
+  },
+  "tsc-alias": {
+    "resolveFullPaths": true
   }
 }

@@ -3,16 +3,20 @@
   "version": "2.0.0",
   "description": "girlscape bot",
   "license": "ISC",
-  "author": "",
+  "author": "Flora Moon",
+  "contributors": [
+    {
+      "name": "hannah",
+      "email": "hannah@harubex.com",
+      "url": "https://github.com/harubex"
+    }
+  ],
   "type": "module",
   "main": "index.js",
-  "imports": {
-    "#*": "./src/*"
-  },
   "scripts": {
     "bot:restart": "docker compose restart girlscape",
     "bot:run": "docker compose up -d",
-    "build": "npx tsc",
+    "build": "tsc && tsc-alias",
     "commands:deploy:dev": "NODE_ENV=development ./scripts/deploy-commands.sh",
     "commands:deploy:prod": "NODE_ENV=production ./scripts/deploy-commands.sh",
     "postversion": "./scripts/postversion.sh"
@@ -27,6 +31,8 @@
   },
   "devDependencies": {
     "@types/node": "^26.2.0",
+    "tsc-alias": "^1.9.2",
+    "tsx": "^4.23.12",
     "typescript": "^7.0.2"
   }
 }
