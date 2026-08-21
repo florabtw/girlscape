@@ -1,11 +1,13 @@
+import type { PlayerVerifieds } from "#types/db.js";
+import type { PlayerClog, PlayerStats } from "#types/temple.js";
 import { hasItem, hasVerified } from "./utils.js";
 
 const hasBaseStats =
-  (target) =>
-  ({ skills }) =>
+  (target: number) =>
+  ({ skills }: { skills: PlayerSkills }) =>
     skills.every(([_key, level]) => level >= target);
 
-const hasSkillCape = ({ skills }) =>
+const hasSkillCape = ({ skills }: { skills: PlayerSkills }) =>
   skills.some(([_key, level]) => level == 99);
 
 const milestonesAvailable = [
@@ -73,10 +75,20 @@ const milestonesAvailable = [
   },
 ];
 
-function getMilestones({ collectionLog, skills, stats, verifieds }) {
+type PlayerSkills = Array<[string, number]>;
+
+type GetMilestonesParams = Omit<PlayerParams, "stats"> & {
+  skills: PlayerSkills;
+};
+
+function getMilestones({
+  collectionLog,
+  skills,
+  verifieds,
+}: GetMilestonesParams) {
   let milestones = [];
   for (let { isDeductible, name, fn, points } of milestonesAvailable) {
-    const hasRequirement = fn({ collectionLog, skills, stats, verifieds });
+    const hasRequirement = fn({ collectionLog, skills, verifieds });
     const score = hasRequirement ? points : 0;
 
     milestones.push({
@@ -89,13 +101,19 @@ function getMilestones({ collectionLog, skills, stats, verifieds }) {
   return milestones;
 }
 
-function getSkills(stats) {
+function getSkills(stats: PlayerStats): PlayerSkills {
   return Object.entries(stats.skills).filter(
     ([key]) => key.endsWith("level") && !key.startsWith("Overall"),
   );
 }
 
-function player({ collectionLog, stats, verifieds }) {
+interface PlayerParams {
+  collectionLog: PlayerClog;
+  stats: PlayerStats;
+  verifieds: PlayerVerifieds | undefined;
+}
+
+function player({ collectionLog, stats, verifieds }: PlayerParams) {
   const skills = getSkills(stats);
   const list = getMilestones({ collectionLog, skills, verifieds });
   const points = list.reduce((sum, { points }) => sum + points, 0);

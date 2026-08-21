@@ -1,17 +1,20 @@
-export function normalizeRsn(rsn) {
+import type { PlayerVerifieds } from "#types/db";
+import type { PlayerClog } from "#types/temple";
+
+export function normalizeRsn(rsn: string) {
   return rsn.toLowerCase().replaceAll("-", " ");
 }
 
 export const hasItem =
-  (item) =>
-  ({ collectionLog }) => {
+  (item: string) =>
+  ({ collectionLog }: { collectionLog: PlayerClog }) => {
     if (!collectionLog) return false;
     return collectionLog.items.some(({ name }) => item === name);
   };
 
 export const hasVerified =
-  (milestone) =>
-  ({ verifieds }) => {
+  (milestone: string) =>
+  ({ verifieds }: { verifieds: PlayerVerifieds | undefined }) => {
     if (!verifieds) return false;
     return Boolean(verifieds[milestone]);
   };
@@ -29,4 +32,4 @@ export const verifiedOptions = [
   { name: "Blood Torva", value: "blood_torva" },
   { name: "Radiant Oathplate", value: "radiant_oathplate" },
   { name: "Brutus Slippers", value: "brutus_slippers" },
-];
+] as const;
