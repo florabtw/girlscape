@@ -1,5 +1,5 @@
 import type { PlayerVerifieds } from "#types/db.js";
-import type { Milestone, PlayerMilestones } from "#types/rank.js";
+import type { Milestone, RankFacet } from "#types/rank.js";
 import type { PlayerClog, PlayerStats } from "#types/temple.js";
 import { hasItem, hasVerified } from "./utils.js";
 
@@ -116,7 +116,7 @@ function player({
   collectionLog,
   stats,
   verifieds,
-}: PlayerParams): PlayerMilestones {
+}: PlayerParams): RankFacet<Milestone> {
   const skills = getSkills(stats);
   const list = getMilestones({ collectionLog, skills, verifieds });
   const points = list.reduce((sum, { points }) => sum + points, 0);

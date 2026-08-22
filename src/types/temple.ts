@@ -7,12 +7,13 @@ interface BasePlayer {
 }
 
 interface PlayerBosses {
-  [key: string]: any;
+  Collections: number;
+  [key: string]: number;
 }
 
 interface PlayerSkills {
   Overall_level: number;
-  [key: string]: any;
+  [key: string]: number;
 }
 
 export interface TempleResponse<B> {

@@ -1,4 +1,12 @@
-function player({ pets, stats }) {
+import type { RankFacet } from "#types/rank";
+import type { PlayerClog, PlayerStats } from "#types/temple";
+
+export interface PlayerCollectionsParams {
+  pets: PlayerClog;
+  stats: PlayerStats;
+}
+
+function player({ pets, stats }: PlayerCollectionsParams): RankFacet {
   const clogPoints = Math.floor(stats.bosses.Collections / 100);
 
   const petPoints = pets ? Math.floor(pets.items.length / 5) : 0;

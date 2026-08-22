@@ -1,13 +1,14 @@
-// ------------- MILESTONES -----------
-
-export interface PlayerMilestones {
-  list: Milestone[];
+export interface RankFacet<T extends Feat = Feat> {
+  list: T[];
   points: number;
 }
 
-export interface Milestone {
-  isDeductible: boolean;
+interface Feat {
   name: string;
   points: number;
+}
+
+export interface Milestone extends Feat {
+  isDeductible: boolean;
   pointsAvailable: number;
 }
