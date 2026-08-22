@@ -19,8 +19,8 @@ async function rankChange({ currentPlayer, lastPlayer }) {
 
   const diff =
     currentPlayer.summary.rank.current - lastPlayer?.summary.rank.current;
-  const descriptor = diff < 0 ? "lost" : "gained";
-  const color = diff > 0 ? 0x00a000 : 0xc00000;
+  const descriptor = diff < 0 ? "gained" : "lost";
+  const color = diff < 0 ? 0x00a000 : 0xc00000;
 
   const embed = new EmbedBuilder()
     .setTitle("Rank Change")

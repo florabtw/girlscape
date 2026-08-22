@@ -26,7 +26,7 @@ async function rank(rsn) {
 }
 
 function byRank(a, b) {
-  let sort = b.summary.rank.current - a.summary.rank.current;
+  let sort = a.summary.rank.current - b.summary.rank.current;
   if (sort === 0) {
     sort = b.summary.points - a.summary.points;
   }

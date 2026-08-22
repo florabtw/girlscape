@@ -1,4 +1,4 @@
-import type { Feat, PlayerRank, RankSummary } from "#types/rank";
+import type { Feat, PlayerRank } from "#types/rank";
 
 function formatList(list: Feat[]) {
   return list

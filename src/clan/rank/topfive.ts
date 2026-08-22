@@ -4,7 +4,7 @@ function apply(ranks: PlayerRank[]) {
   let i = 0;
   let j = 1;
 
-  while (ranks[i]!.summary.rank.current > 19 && i < ranks.length) {
+  while (ranks[i]!.summary.rank.current < 6 && i < ranks.length) {
     while (
       ranks[i]!.summary.rank.current === ranks[j]!.summary.rank.current &&
       j < ranks.length
@@ -15,7 +15,7 @@ function apply(ranks: PlayerRank[]) {
       displacements.push({ name: ranks[i]!.rsn });
 
       player.summary.displacements = displacements;
-      player.summary.rank.current--;
+      player.summary.rank.current++;
 
       j++;
     }

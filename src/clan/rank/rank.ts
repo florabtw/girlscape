@@ -41,7 +41,7 @@ function getSummary({
   return {
     displacements: [],
     deductions,
-    rank: { current, potential },
+    rank: { current: 25 - current, potential: 25 - potential },
     points,
     progress: progress.eh,
   };
