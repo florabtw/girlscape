@@ -6,11 +6,11 @@ export interface RankFacet<T extends Feat = Feat> {
 interface Feat {
   name: string;
   points: number;
+  pointsAvailable?: number;
 }
 
 export interface Milestone extends Feat {
   isDeductible: boolean;
-  pointsAvailable: number;
 }
 
 export interface PlayerProgress {

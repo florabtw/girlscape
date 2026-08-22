@@ -7,6 +7,12 @@ interface BasePlayer {
 }
 
 interface PlayerBosses {
+  "Chambers of Xeric Challenge Mode": number;
+  "Chambers of Xeric": number;
+  "Theatre of Blood Challenge Mode": number;
+  "Theatre of Blood": number;
+  "Tombs of Amascut Expert": number;
+  "Tombs of Amascut": number;
   Collections: number;
   Ehb: number;
   Ehb_im: number;
