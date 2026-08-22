@@ -1,4 +1,6 @@
-function formatList(list) {
+import type { Feat, PlayerRank, RankSummary } from "#types/rank";
+
+function formatList(list: Feat[]) {
   return list
     .map((item) => {
       const emoji = item.points ? ":green_circle:" : ":black_circle:";
@@ -13,7 +15,9 @@ function formatList(list) {
 }
 
 // Deductions + Displacements
-function formatDeranks({ summary: { deductions, displacements } }) {
+function formatDeranks({
+  summary: { deductions, displacements },
+}: Pick<PlayerRank, "summary">) {
   let msg = "";
 
   if (displacements?.length) {
@@ -28,7 +32,7 @@ function formatDeranks({ summary: { deductions, displacements } }) {
   return msg;
 }
 
-export default function player(player) {
+export default function player(player: PlayerRank) {
   const { collections, events, milestones, raids, rsn, summary } = player;
 
   return `**Clan Member**: ${rsn}

@@ -3,7 +3,7 @@ export interface RankFacet<T extends Feat = Feat> {
   points: number;
 }
 
-interface Feat {
+export interface Feat {
   name: string;
   points: number;
   pointsAvailable?: number;
@@ -26,9 +26,11 @@ export interface PlayerDeductions {
 }
 
 export type Deduction = Feat;
+export type Displacement = { name: string };
 
 export interface RankSummary {
   deductions: PlayerDeductions;
+  displacements: Displacement[];
   rank: { current: number; potential: number };
   points: number;
   progress: number;

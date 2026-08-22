@@ -39,6 +39,7 @@ function getSummary({
   const current = potential - deductions.ranks;
 
   return {
+    displacements: [],
     deductions,
     rank: { current, potential },
     points,
