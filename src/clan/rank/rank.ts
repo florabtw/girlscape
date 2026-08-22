@@ -9,7 +9,7 @@ import Milestones from "./milestones.js";
 import Progress from "./progress.js";
 import Raids from "./raids.js";
 
-const POINTS_RANKS = [2, 4, 6, 8, 10, 15, 20, 25, 35, 40, 45, 50];
+const POINTS_RANKS = [2, 4, 6, 8, 10, 15, 20, 30, 40, 45, 55, 65];
 
 function getRank(points: number) {
   let rank = POINTS_RANKS.findIndex((val) => val > points);
