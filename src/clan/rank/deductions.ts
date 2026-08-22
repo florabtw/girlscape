@@ -1,4 +1,14 @@
-function apply({ milestones, rank }) {
+import type { Milestone, PlayerDeductions, RankFacet } from "#types/rank";
+
+interface GetPlayerDeductionsParams {
+  milestones: RankFacet<Milestone>;
+  rank: number;
+}
+
+function apply({
+  milestones,
+  rank,
+}: GetPlayerDeductionsParams): PlayerDeductions {
   const deductions = milestones.list
     .filter((m) => m.isDeductible)
     .map(({ name, points }) => ({ name, points: points === 0 ? 1 : 0 }));

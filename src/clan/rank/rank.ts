@@ -1,3 +1,7 @@
+import type { PlayerVerifieds } from "#types/db.js";
+import type { PlayerEvents } from "#types/events.js";
+import type { PlayerRank, RankSummary } from "#types/rank.js";
+import type { PlayerClog, PlayerStats } from "#types/temple.js";
 import Collections from "./collections.js";
 import Deductions from "./deductions.js";
 import Events from "./events.js";
@@ -7,7 +11,7 @@ import Raids from "./raids.js";
 
 const POINTS_RANKS = [2, 4, 6, 8, 10, 15, 20, 25, 35, 40, 45, 50];
 
-function getRank(points) {
+function getRank(points: number) {
   let rank = POINTS_RANKS.findIndex((val) => val > points);
 
   if (rank < 0) rank = 12; // max rank
@@ -15,7 +19,15 @@ function getRank(points) {
   return rank;
 }
 
-function getSummary({ collections, events, milestones, progress, raids }) {
+type GetSummaryParams = Omit<PlayerRank, "summary" | "rsn">;
+
+function getSummary({
+  collections,
+  events,
+  milestones,
+  progress,
+  raids,
+}: GetSummaryParams): RankSummary {
   const progressRank = progress.rank;
   const points =
     collections.points + events.points + milestones.points + raids.points;
@@ -34,7 +46,21 @@ function getSummary({ collections, events, milestones, progress, raids }) {
   };
 }
 
-function player({ collectionLog, events, pets, stats, verifieds }) {
+interface PlayerRankParams {
+  collectionLog: PlayerClog;
+  events: PlayerEvents;
+  pets: PlayerClog;
+  stats: PlayerStats;
+  verifieds: PlayerVerifieds;
+}
+
+function player({
+  collectionLog,
+  events,
+  pets,
+  stats,
+  verifieds,
+}: PlayerRankParams) {
   const events_ = Events.player({ events });
   const progress = Progress.player({ stats });
   const milestones = Milestones.player({ collectionLog, stats, verifieds });

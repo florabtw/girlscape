@@ -1,4 +1,11 @@
-function player({ events: { played, won } }) {
+import type { PlayerEvents } from "#types/events";
+import type { RankFacet } from "#types/rank";
+
+interface PlayerEventsParams {
+  events: PlayerEvents;
+}
+
+function player({ events: { played, won } }: PlayerEventsParams): RankFacet {
   const list = [
     { name: "Participated", points: played.length },
     { name: "Won", points: won.length },

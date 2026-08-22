@@ -1,7 +1,7 @@
 import { createClient, type RedisClientType } from "redis";
 
 import config from "#config";
-import type { ClanEventList } from "#types/events";
+import type { ClanEventList, PlayerEvents } from "#types/events";
 import type { ClanClog, PlayerClog, ClanStats } from "#types/temple";
 import type { ClanVerifieds } from "#types/db";
 
@@ -34,7 +34,7 @@ export async function getClanEvents(): Promise<ClanEventList> {
   return events || {};
 }
 
-export async function getPlayerEvents(player: string) {
+export async function getPlayerEvents(player: string): Promise<PlayerEvents> {
   const events = Object.values(await getClanEvents());
 
   const played = events.filter((event) => event.players.includes(player));

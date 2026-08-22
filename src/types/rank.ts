@@ -19,3 +19,27 @@ export interface PlayerProgress {
   eh: number;
   rank: number;
 }
+
+export interface PlayerDeductions {
+  list: Deduction[];
+  ranks: number;
+}
+
+export type Deduction = Feat;
+
+export interface RankSummary {
+  deductions: PlayerDeductions;
+  rank: { current: number; potential: number };
+  points: number;
+  progress: number;
+}
+
+export interface PlayerRank {
+  collections: RankFacet;
+  events: RankFacet;
+  milestones: RankFacet<Milestone>;
+  progress: PlayerProgress;
+  raids: RankFacet;
+  summary: RankSummary;
+  rsn: string;
+}

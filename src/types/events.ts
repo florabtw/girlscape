@@ -6,3 +6,8 @@ export interface ClanEvent {
   players: string[];
   winners: string[];
 }
+
+export interface PlayerEvents {
+  played: ClanEvent[];
+  won: ClanEvent[];
+}
