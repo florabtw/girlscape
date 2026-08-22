@@ -8,11 +8,17 @@ interface BasePlayer {
 
 interface PlayerBosses {
   Collections: number;
+  Ehb: number;
+  Ehb_im: number;
+  Ehb_uim: number;
   [key: string]: number;
 }
 
 interface PlayerSkills {
   Overall_level: number;
+  Ehp: number;
+  Ehp_im: number;
+  Uim_ehp: number;
   [key: string]: number;
 }
 

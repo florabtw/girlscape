@@ -12,3 +12,10 @@ export interface Milestone extends Feat {
   isDeductible: boolean;
   pointsAvailable: number;
 }
+
+export interface PlayerProgress {
+  ehp: number;
+  ehb: number;
+  eh: number;
+  rank: number;
+}

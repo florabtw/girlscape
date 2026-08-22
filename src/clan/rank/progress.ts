@@ -1,11 +1,14 @@
-const EHP_KEY = ["Ehp", "Ehp_im", "Uim_ehp", "Ehp_im"];
-const EHB_KEY = ["Ehb", "Ehb_im", "Ehb_uim", "Ehb_im"];
+import type { PlayerProgress } from "#types/rank";
+import type { PlayerStats } from "#types/temple";
+
+const EHP_KEY = ["Ehp", "Ehp_im", "Uim_ehp", "Ehp_im"] as const;
+const EHB_KEY = ["Ehb", "Ehb_im", "Ehb_uim", "Ehb_im"] as const;
 
 // Ranks 1-12 by EHP+EHB
-const EH_RANKS = [25, 50, 75, 100, 200, 300, 400, 500, 1000, 1500, 2000, 2500];
+const EH_RANKS = [0, 25, 50, 75, 100, 200, 300, 400, 500, 750, 1000, 1500];
 
 // Returns base EH Rank (1 to 12)
-function player({ stats }) {
+function player({ stats }: { stats: PlayerStats }): PlayerProgress {
   const ehpKey = EHP_KEY[stats.game_mode];
   const ehbKey = EHB_KEY[stats.game_mode];
 
