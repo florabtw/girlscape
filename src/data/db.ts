@@ -3,7 +3,7 @@ import { createClient, type RedisClientType } from "redis";
 import config from "#config";
 import type { ClanEventList, PlayerEvents } from "#types/events";
 import type { ClanClog, PlayerClog, ClanStats } from "#types/temple";
-import type { ClanVerifieds } from "#types/db";
+import type { ClanVerifieds, PlayerIcons } from "#types/db";
 
 let db: RedisClientType;
 let isReady: boolean;
@@ -46,6 +46,19 @@ export async function getPlayerEvents(player: string): Promise<PlayerEvents> {
 export async function getEvent(id: string) {
   const events = await getClanEvents();
   return events[id];
+}
+
+export async function getPlayerIcons(): Promise<PlayerIcons> {
+  const db = await getRedisClient();
+  const playerIcons = (await db.json.get(
+    "clan:playerIcons",
+  )) as JSONGet<PlayerIcons>;
+  return playerIcons || {};
+}
+
+export async function getPlayerIcon(player: string) {
+  const playerIcons = await getPlayerIcons();
+  return playerIcons[player];
 }
 
 async function getClanStats() {

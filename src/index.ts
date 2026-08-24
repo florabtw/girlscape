@@ -31,7 +31,7 @@ const commandFolders = fs.readdirSync(foldersPath);
     const commandsPath = path.join(foldersPath, folder);
     const commandFiles = fs
       .readdirSync(commandsPath)
-      .filter((file) => file.endsWith(".js"));
+      .filter((file) => file.endsWith(".js") || file.endsWith(".ts"));
     for (const file of commandFiles) {
       const filePath = path.join(commandsPath, file);
       const { default: command } = await import(filePath);

@@ -1,11 +1,13 @@
 import Fuse from "fuse.js";
 
 import { getClanEvents, getMissingNames, getPlayerNames } from "#data/db.js";
+import type { AutocompleteInteraction } from "discord.js";
+import { getAllIcons } from "./icon";
 
-const caseInsensitive = (a, b) =>
+const caseInsensitive = (a: string, b: string) =>
   a.localeCompare(b, undefined, { sensitivity: "base" });
 
-async function event(interaction) {
+async function event(interaction: AutocompleteInteraction) {
   const focusedValue = interaction.options.getFocused();
   const events = Object.values(await getClanEvents());
 
@@ -29,7 +31,27 @@ async function event(interaction) {
   await interaction.respond(options);
 }
 
-async function name(interaction) {
+async function icon(interaction: AutocompleteInteraction) {
+  const focusedValue = interaction.options.getFocused();
+
+  const icons = getAllIcons();
+  icons.sort(caseInsensitive);
+
+  let options;
+  if (!focusedValue) {
+    options = icons.map((icon) => ({ name: icon, value: icon }));
+  } else {
+    const fuse = new Fuse(icons);
+    const items = fuse.search(focusedValue);
+    options = items.map((opt) => ({ name: opt.item, value: opt.item }));
+  }
+
+  options = options.slice(0, 25);
+
+  await interaction.respond(options);
+}
+
+async function name(interaction: AutocompleteInteraction) {
   const focusedValue = interaction.options.getFocused();
   const names = await getPlayerNames();
   names.sort(caseInsensitive);
@@ -48,7 +70,7 @@ async function name(interaction) {
   await interaction.respond(options);
 }
 
-async function oldName(interaction) {
+async function oldName(interaction: AutocompleteInteraction) {
   const focusedValue = interaction.options.getFocused();
   const { localOnly } = await getMissingNames();
   localOnly.sort(caseInsensitive);
@@ -67,7 +89,7 @@ async function oldName(interaction) {
   await interaction.respond(options);
 }
 
-async function newName(interaction) {
+async function newName(interaction: AutocompleteInteraction) {
   const focusedValue = interaction.options.getFocused();
   const { remoteOnly } = await getMissingNames();
   remoteOnly.sort(caseInsensitive);
@@ -88,6 +110,7 @@ async function newName(interaction) {
 
 export default {
   event,
+  icon,
   name,
   newName,
   oldName,
