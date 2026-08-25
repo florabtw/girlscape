@@ -65,9 +65,12 @@ async function leaderboard() {
 
   await Notify.rankChange(players);
 
-  const message = await Format.leaderboardImage(players);
-
-  return { players, message };
+  return {
+    async getImage() {
+      return Format.leaderboardImage(players);
+    },
+    players,
+  };
 }
 
 async function nameChange(oldRsn, newRsn) {

@@ -2,6 +2,7 @@ import { getPlayerIcon } from "#data/db";
 import type { PlayerRank } from "#types/rank";
 import { getRankIcon } from "#utils/icon";
 import { normalizeRsn } from "#utils/names";
+import { generateEmptyPlayer } from "#utils/player";
 
 async function apply(ranks: PlayerRank[]) {
   // apply displacements
@@ -44,6 +45,13 @@ async function apply(ranks: PlayerRank[]) {
       taken.add(preferredIcon);
       player.summary.rank.icon = preferredIcon;
     }
+  }
+
+  // ensure player for each top5 slot
+  const topRank = ranks[0]!.summary.rank.current;
+  for (let r = topRank - 1; r > 0; r--) {
+    const emptyPlayer = generateEmptyPlayer(r);
+    ranks.unshift(emptyPlayer);
   }
 
   return ranks;

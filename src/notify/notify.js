@@ -1,5 +1,6 @@
 import Webhook from "#notify/webhook.js";
 import { getRedisClient } from "#data/db.js";
+import { EMPTY_RSN } from "#utils/player";
 
 async function rankChange(players) {
   const db = await getRedisClient();
@@ -10,6 +11,8 @@ async function rankChange(players) {
   if (!lastLeaderboard) return;
 
   for (const currentPlayer of players) {
+    if (currentPlayer.rsn === EMPTY_RSN) continue;
+
     const lastPlayer = lastLeaderboard.find((p) => p.rsn === currentPlayer.rsn);
 
     const currentRank = currentPlayer.summary.rank.current;

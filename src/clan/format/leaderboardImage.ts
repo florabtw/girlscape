@@ -83,14 +83,18 @@ const columns: ColumnDef[] = [
     align: "right",
     header: "Points",
     value: (player) =>
-      String(player.summary.points).padStart(4).padStart(12, "·"),
+      String(player.summary.points || "—")
+        .padStart(4)
+        .padStart(12, "·"),
     width: (w) => w * 0.25,
   },
   {
     align: "right",
     header: "EHP/EHB",
     value: (player) =>
-      String(player.summary.progress).padStart(6).padStart(12, "·"),
+      String(player.summary.progress || "—")
+        .padStart(6)
+        .padStart(12, "·"),
     width: (w) => w * 0.25,
   },
 ];
