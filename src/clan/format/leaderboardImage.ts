@@ -1,6 +1,7 @@
 import Canvas from "@napi-rs/canvas";
 import { AttachmentBuilder } from "discord.js";
-import { getIconPath, getRankIcon } from "#utils/icon.js";
+import { getIconPath } from "#utils/icon.js";
+import type { PlayerRank } from "#types/rank";
 
 const WIDTH = 800;
 
@@ -17,7 +18,7 @@ const PADDING_IN = 60;
 const PADDING_X_OUT = 90;
 const PADDING_Y_OUT = 60;
 
-async function renderBackground(canvas) {
+async function renderBackground(canvas: Canvas.Canvas) {
   const context = canvas.getContext("2d");
 
   context.fillStyle = "#966FD6";
@@ -30,7 +31,7 @@ async function renderBackground(canvas) {
   context.drawImage(fashionImage, PADDING_X_OUT + WIDTH - 50, 15, 80, 160);
 }
 
-function renderTitle(canvas) {
+function renderTitle(canvas: Canvas.Canvas) {
   const context = canvas.getContext("2d");
 
   context.font = `bold ${TITLE_HEIGHT}px DejaVu Sans Mono`;
@@ -47,7 +48,19 @@ function renderTitle(canvas) {
   );
 }
 
-const columns = [
+interface ColumnDef {
+  align: "left" | "right";
+  icon?: (player: PlayerRank) => {
+    path: string;
+    width: number;
+    height: number;
+  };
+  header: string;
+  value: (player: PlayerRank) => string;
+  width: (w: number) => number;
+}
+
+const columns: ColumnDef[] = [
   {
     align: "left",
     icon: (player) => ({
@@ -82,17 +95,24 @@ const columns = [
   },
 ];
 
-function textAlign({ align, end, start, textWidth }) {
+interface TextAlignParams {
+  align: "left" | "center" | "right";
+  end: number;
+  start: number;
+  textWidth: number;
+}
+
+function textAlign({ align, end, start, textWidth }: TextAlignParams): number {
   if (align === "left") {
     return start;
   } else if (align === "center") {
     return start + (end - start) / 2 - textWidth / 2;
-  } else if (align === "right") {
+  } else /* align right */ {
     return end - textWidth;
   }
 }
 
-async function renderBoard(canvas, players) {
+async function renderBoard(canvas: Canvas.Canvas, players: PlayerRank[]) {
   const context = canvas.getContext("2d");
 
   context.font = `${TEXT_HEIGHT}px DejaVu Sans Mono`;
@@ -103,7 +123,7 @@ async function renderBoard(canvas, players) {
 
   let columnXStart = xStart;
   for (let i = 0; i < columns.length; i++) {
-    const column = columns[i];
+    const column = columns[i]!;
     const columnWidth = column.width(WIDTH);
     let columnXEnd = columnXStart + columnWidth;
 
@@ -122,7 +142,7 @@ async function renderBoard(canvas, players) {
     // Players
     context.font = `${TEXT_HEIGHT}px DejaVu Sans Mono`;
     for (let j = 0; j < players.length; j++) {
-      const player = players[j];
+      const player = players[j]!;
 
       const y = yStart + HEADER_LINE_HEIGHT + (j + 1) * TEXT_LINE_HEIGHT;
 
@@ -155,7 +175,7 @@ async function renderBoard(canvas, players) {
   }
 }
 
-export default async function leaderboardImage(players) {
+export default async function leaderboardImage(players: PlayerRank[]) {
   const maxHeight =
     PADDING_Y_OUT +
     TITLE_LINE_HEIGHT +
