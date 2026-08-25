@@ -1,5 +1,6 @@
 import { getPlayerIcon } from "#data/db";
 import type { PlayerRank } from "#types/rank";
+import { getRankIcon } from "#utils/icon";
 import { normalizeRsn } from "#utils/names";
 
 async function apply(ranks: PlayerRank[]) {
@@ -19,6 +20,7 @@ async function apply(ranks: PlayerRank[]) {
 
       player.summary.displacements = displacements;
       player.summary.rank.current++;
+      player.summary.rank.icon = getRankIcon(player.summary.rank.current)!;
 
       j++;
     }
@@ -30,10 +32,8 @@ async function apply(ranks: PlayerRank[]) {
   // apply icons
   const taken = new Set();
 
-  for (let i = 0; i < 5; i++) {
-    const player = ranks[i];
-
-    if (!player) continue;
+  for (const player of ranks) {
+    if (player.summary.rank.current > 5) continue;
 
     const playerName = normalizeRsn(player.rsn);
     const preferredIcon = await getPlayerIcon(playerName);
