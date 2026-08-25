@@ -71,6 +71,12 @@ const milestonesAvailable = [
   },
   { name: "Brutus Slippers", fn: hasVerified("brutus_slippers"), points: 2 },
   { name: "Solo ToB", fn: hasVerified("solo_tob"), points: 3 },
+  { name: "Gold Speedrun Trophy", fn: hasVerified("gold_speedrun"), points: 1 },
+  {
+    name: "Diamond Speedrun Trophy",
+    fn: hasVerified("diamond_speedrun"),
+    points: 2,
+  },
 ];
 
 type PlayerSkills = Array<[string, number]>;
