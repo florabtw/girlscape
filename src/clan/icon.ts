@@ -24,6 +24,11 @@ async function get(player: string) {
       inline: true,
       name: "Player",
       value: player,
+    })
+    .addFields({
+      inline: true,
+      name: "Icon",
+      value: icon,
     });
   return {
     content: "",
@@ -50,6 +55,11 @@ async function set(player: string, icon: string) {
       inline: true,
       name: "Player",
       value: player,
+    })
+    .addFields({
+      inline: true,
+      name: "Icon",
+      value: icon,
     });
   return {
     embeds: [embed],

@@ -1,7 +1,7 @@
 import { AttachmentBuilder, EmbedBuilder, WebhookClient } from "discord.js";
 
 import { getRedisClient } from "#data/db.js";
-import { getRankIcon } from "#utils/icon.js";
+import { getIconFileName, getIconPath } from "#utils/icon.js";
 
 // handle rank up and down
 // handle NEW players
@@ -14,8 +14,9 @@ async function rankChange({ currentPlayer, lastPlayer }) {
 
   const client = new WebhookClient({ url });
 
-  const icon = getRankIcon(currentPlayer);
-  const iconAttachment = new AttachmentBuilder(icon.path);
+  const iconFileName = getIconFileName(currentPlayer.summary.rank.icon);
+  const iconPath = getIconPath(currentPlayer.summary.rank.icon);
+  const iconAttachment = new AttachmentBuilder(iconPath);
 
   const diff =
     currentPlayer.summary.rank.current - lastPlayer?.summary.rank.current;
@@ -26,7 +27,7 @@ async function rankChange({ currentPlayer, lastPlayer }) {
     .setTitle("Rank Change")
     .setDescription(`${currentPlayer.rsn} has ${descriptor} a rank!`)
     .setColor(color)
-    .setThumbnail(`attachment://${icon.fileName}`)
+    .setThumbnail(`attachment://${iconFileName}`)
     .addFields({
       inline: true,
       name: "Previous Rank",

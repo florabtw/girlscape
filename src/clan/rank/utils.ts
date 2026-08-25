@@ -1,10 +1,6 @@
 import type { PlayerVerifieds } from "#types/db";
 import type { PlayerClog } from "#types/temple";
 
-export function normalizeRsn(rsn: string) {
-  return rsn.toLowerCase().replaceAll("-", " ");
-}
-
 export const hasItem =
   (item: string) =>
   ({ collectionLog }: { collectionLog: PlayerClog }) => {

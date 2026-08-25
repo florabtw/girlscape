@@ -31,7 +31,7 @@ export type Displacement = { name: string };
 export interface RankSummary {
   deductions: PlayerDeductions;
   displacements: Displacement[];
-  rank: { current: number; potential: number };
+  rank: { current: number; icon: string; potential: number };
   points: number;
   progress: number;
 }

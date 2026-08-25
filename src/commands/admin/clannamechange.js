@@ -2,7 +2,7 @@ import { SlashCommandBuilder } from "discord.js";
 
 import Autocomplete from "#utils/autocomplete.js";
 import clan from "#clan/clan.js";
-import { normalizeRsn } from "#clan/rank/utils.js";
+import { normalizeRsn } from "#utils/names";
 
 export default {
   data: new SlashCommandBuilder()

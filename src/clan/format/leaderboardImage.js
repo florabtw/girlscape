@@ -1,6 +1,6 @@
 import Canvas from "@napi-rs/canvas";
 import { AttachmentBuilder } from "discord.js";
-import { getRankIcon } from "#utils/icon.js";
+import { getIconPath, getRankIcon } from "#utils/icon.js";
 
 const WIDTH = 800;
 
@@ -51,7 +51,7 @@ const columns = [
   {
     align: "left",
     icon: (player) => ({
-      path: getRankIcon(player).path,
+      path: getIconPath(player.summary.rank.icon),
       width: 24,
       height: 24,
     }),

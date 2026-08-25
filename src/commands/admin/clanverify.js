@@ -2,7 +2,8 @@ import { SlashCommandBuilder } from "discord.js";
 
 import Autocomplete from "#utils/autocomplete.js";
 import clan from "#clan/clan.js";
-import { normalizeRsn, verifiedOptions } from "#clan/rank/utils.js";
+import { verifiedOptions } from "#clan/rank/utils.js";
+import { normalizeRsn } from "#utils/names";
 
 function genCommand() {
   const command = new SlashCommandBuilder()

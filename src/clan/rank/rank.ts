@@ -2,6 +2,7 @@ import type { PlayerVerifieds } from "#types/db.js";
 import type { PlayerEvents } from "#types/events.js";
 import type { PlayerRank, RankSummary } from "#types/rank.js";
 import type { PlayerClog, PlayerStats } from "#types/temple.js";
+import { getRankIcon } from "#utils/icon.js";
 import Collections from "./collections.js";
 import Deductions from "./deductions.js";
 import Events from "./events.js";
@@ -19,7 +20,10 @@ function getRank(points: number) {
   return rank;
 }
 
-type GetSummaryParams = Omit<PlayerRank, "summary" | "rsn">;
+type GetSummaryParams = Pick<
+  PlayerRank,
+  "collections" | "events" | "milestones" | "progress" | "raids"
+>;
 
 function getSummary({
   collections,
@@ -41,7 +45,11 @@ function getSummary({
   return {
     displacements: [],
     deductions,
-    rank: { current: 25 - current, potential: 25 - potential },
+    rank: {
+      current: 25 - current,
+      icon: getRankIcon(25 - current)!,
+      potential: 25 - potential,
+    },
     points,
     progress: progress.eh,
   };

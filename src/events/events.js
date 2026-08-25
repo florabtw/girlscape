@@ -1,5 +1,5 @@
 import { getRedisClient, getEvent, getPlayerNames } from "#data/db.js";
-import { normalizeRsn } from "#clan/rank/utils.js";
+import { normalizeRsn } from "#utils/names";
 import Format from "./format.js";
 
 async function addPlayers(id, players) {

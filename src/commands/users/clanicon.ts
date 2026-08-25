@@ -5,8 +5,8 @@ import {
 } from "discord.js";
 
 import Autocomplete from "#utils/autocomplete.js";
-import { normalizeRsn } from "#clan/rank/utils.js";
 import icon from "#clan/icon";
+import { normalizeRsn } from "#utils/names";
 
 export default {
   data: new SlashCommandBuilder()

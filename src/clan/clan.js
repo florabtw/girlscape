@@ -3,7 +3,7 @@ import Notify from "#notify/notify.js";
 import Rank from "#clan/rank/rank.js";
 import TopFive from "#clan/rank/topfive.js";
 import temple from "#clan/temple.js";
-import { normalizeRsn } from "#clan/rank/utils.js";
+import { normalizeRsn } from "#utils/names";
 import {
   getCollectionLog,
   getPets,
@@ -61,7 +61,7 @@ async function leaderboard() {
   }
 
   players.sort(byRank);
-  players = TopFive.apply(players);
+  players = await TopFive.apply(players);
 
   await Notify.rankChange(players);
 

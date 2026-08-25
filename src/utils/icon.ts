@@ -1,4 +1,3 @@
-import type { PlayerRank } from "#types/rank";
 import fs from "node:fs";
 
 const Ranks = [
@@ -28,12 +27,16 @@ const Ranks = [
   "Burnt",
 ];
 
-export function getRankIcon({ summary }: PlayerRank) {
-  const rank = summary.rank.current;
-  const rankName = Ranks[Math.max(rank - 1, 0)];
-  const fileName = `Clan_icon_${rankName}.png`;
-  const path = `./src/images/ranks/${fileName}`;
-  return { path, fileName };
+export function getRankIcon(rank: number) {
+  return Ranks[Math.min(rank - 1, Ranks.length - 1)];
+}
+
+export function getIconFileName(rank: string) {
+  return `Clan_icon_${rank}.png`;
+}
+
+export function getIconPath(rank: string) {
+  return `./src/images/ranks/${getIconFileName(rank)}`;
 }
 
 export function getAllIcons(): string[] {
